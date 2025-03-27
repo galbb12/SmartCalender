@@ -2,9 +2,21 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
+// Fetch the API key (if it exists)
+def chatGptApiKey = localProperties.getProperty("CHATGPT_API_KEY", "")
+
 android {
     namespace 'com.gal.smartcalender'
     compileSdk 34
+    buildFeatures {
+        buildConfig true
+    }
 
     defaultConfig {
         applicationId "com.gal.smartcalender"
@@ -13,6 +25,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+        buildConfigField "String", "CHATGPT_API_KEY", "\"${chatGptApiKey}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation "com.squareup.okhttp3:okhttp:4.12.0"
+    implementation 'com.google.code.gson:gson:2.12.1'
     implementation "androidx.room:room-runtime:2.6.1"
     implementation libs.appcompat
     implementation libs.material
