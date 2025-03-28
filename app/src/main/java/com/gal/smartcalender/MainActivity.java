@@ -33,37 +33,6 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        chatGptApi = new ChatGptApi(com.gal.smartcalender.BuildConfig.CHATGPT_API_KEY);
-        text_field_view = findViewById(R.id.editTextText);
-        send_button = findViewById(R.id.Send);
-
-        Callback ok_http_callback =  new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();  // Handle network failure
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    System.err.println("Unexpected code " + response);
-                    return;
-                }
-
-                String responseData = response.body().string();
-                System.out.println("Response: " + responseData);
-
-                // If updating UI, use runOnUiThread() inside an Activity
-            }
-        };
-
-        send_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chatGptApi.sendQuery(text_field_view.getText().toString(), ok_http_callback);
-            }
-        });
-
 
     }
 
