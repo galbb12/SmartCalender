@@ -15,28 +15,18 @@ import okhttp3.RequestBody;
 public class ChatGptApi {
 
     private String _api_key;
+    private String _model;
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
-    ChatGptApi(String api_key){
+    ChatGptApi(String api_key, String model){
         this._api_key = api_key;
+        this._model = model;
     }
 
-    public void sendQuery(String userMessage, Callback callback) {
+    public void sendQuery(Object[] messages , Callback callback) {
         OkHttpClient client = new OkHttpClient();
 
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("model", "gpt-3.5-turbo");
-
-//        Tell chatgpt how to parse the data
-        Object[] messages = new Object[]{
-                new HashMap<String, String>() {{
-                    put("role", "system");
-                    put("content", "You are a helpful assistant.");
-                }},
-                new HashMap<String, String>() {{
-                    put("role", "user");
-                    put("content", userMessage);
-                }}
-        };
+        requestBody.put("model", _model);
 
         requestBody.put("messages", messages);
 
