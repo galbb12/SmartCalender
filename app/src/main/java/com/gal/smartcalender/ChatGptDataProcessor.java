@@ -9,9 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,7 +77,38 @@ public class ChatGptDataProcessor extends DataProcessor {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Log.d("Got response", response.body().string());
+
+                Gson gson = new Gson();
+                if(response.body() != null){
+                    String resp = response.body().string();
+                    Log.d("response:", resp);
+                    JsonObject jsonObject = JsonParser.parseString(resp).getAsJsonObject();
+                    JsonArray choices = jsonObject.getAsJsonArray("choices");
+                    JsonObject firstChoice = choices.get(0).getAsJsonObject();
+                    JsonObject message = firstChoice.getAsJsonObject("message");
+                    String content = message.get("content").getAsString();
+
+                    JsonObject jsonContent = gson.fromJson(content, JsonObject.class);
+
+                    Log.d("Json parsed description", jsonContent.get("description").getAsString());
+                    String descriptionStr = jsonContent.get("description").getAsString();
+                    String startDateStr = jsonContent.get("start_date").getAsString();
+                    String endDateStr = jsonContent.get("start_date").getAsString();
+                    String urgencyStr = jsonContent.get("urgency").getAsString();
+                    String importanceStr = jsonContent.get("urgency").getAsString();
+
+                    Event event = new Event();
+                    event.data = resp;
+                    event.dataSource = "notification";
+                    event.eventInfo = descriptionStr;
+                    event.urgency = Float.parseFloat(urgencyStr);
+                    event.importance = Float.parseFloat(importanceStr);
+                    event.startDate = LocalDateTime.parse(startDateStr);
+                    event.endDate = LocalDateTime.parse(endDateStr);
+                    _db.EventsDao().insertAll(event);
+
+
+                }
             }
         });
 

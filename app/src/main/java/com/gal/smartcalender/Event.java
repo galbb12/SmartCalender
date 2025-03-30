@@ -16,12 +16,6 @@ interface EventDao {
     @Query("SELECT * FROM Event")
     List<Event> getAll();
 
-    @Query("SELECT * FROM Event where handled=0")
-    List<Event> getAllNothandled();
-
-    @Query("SELECT * FROM Event where handled=0")
-    List<Event> getAllHandled();
-
     @Insert
     void insertAll(Event... events);
 
@@ -32,25 +26,28 @@ interface EventDao {
 @Entity
 public class Event {
     @PrimaryKey
-    public int eventId;
+    public int eventId; // Database eventId
 
-    @ColumnInfo(name = "dataSource") // The app's name
+    @ColumnInfo(name = "DataSource") // Notification, Gmail app, whatever...
     public String dataSource;
 
-    @ColumnInfo(name = "data") // The data to parse into the calender event
+    @ColumnInfo(name = "Data") // The data to parse into the calender event
     public String data;
 
-    @ColumnInfo(name = "handled")
-    public Boolean handled;
-
-    @ColumnInfo(name = "eventInfo") // The Information to write into the calender app
+    @ColumnInfo(name = "EventDescription") // The Information to write into the calender app
     public String eventInfo;
 
-    @ColumnInfo(name = "startDate") // The start date of the event
+    @ColumnInfo(name = "StartDate") // The start date of the event
     public LocalDateTime startDate;
 
-    @ColumnInfo(name = "endDate") // The end date of the event
+    @ColumnInfo(name = "EndDate") // The end date of the event
     public LocalDateTime endDate;
+
+    @ColumnInfo(name = "Urgency") // Score 0-1 on how urgent is the event
+    public float urgency;
+
+    @ColumnInfo(name = "Importance") // Score 0-1 on how important is the event
+    public float importance;
 }
 
 

@@ -5,8 +5,8 @@ public interface Constants {
             "You will receive notifications in JSON format. Each notification contains details about an event. " +
                     "Your task is to extract relevant information and generate a structured calendar event in the following JSON format:\n\n" +
                     "{\n" +
-                    "  \"start_date\": \"<ISO 8601 DateTime format>\",\n" +
-                    "  \"end_date\": \"<ISO 8601 DateTime format>\",\n" +
+                    "  \"start_date\": \"<ISO 8601 DateTime format>\", Please ensure you provide the result in UTC\n" +
+                    "  \"end_date\": \"<ISO 8601 DateTime format>\", Please ensure you provide the result in UTC\n" +
                     "  \"description\": \"<Concise event summary>\",\n" +
                     "  \"urgency\": <0-1 score>,\n" +
                     "  \"importance\": <0-1 score>\n" +
@@ -18,7 +18,8 @@ public interface Constants {
                     "- Assign Importance (0-1): Score how significant the event is (1 = critical, 0 = trivial).\n\n" +
                     "If any required field is missing in the notification, infer it based on context or use sensible defaults. " +
                     "Always ensure the output is well-formatted JSON.\n" +
-                    "Please note that the current time is: <CURRENT_DATE_TIME>";
+                    "Please note that the current date time in UTC+0 is: <CURR_DATE_TIME>, Please note the time zone and adjust accordingly\n"+
+                    "The users notification will include times in time zone: <CURR_TIME_ZONE> if not provided please use this one, please convert accordingly";
 
     public static final String db_name = "event-db";
 

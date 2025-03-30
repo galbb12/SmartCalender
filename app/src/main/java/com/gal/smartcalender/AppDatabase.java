@@ -13,5 +13,5 @@ import java.time.format.DateTimeFormatter;
 @Database(entities = {Event.class}, version = 1)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
-    public abstract EventDao handledEventDao();
+    public abstract EventDao EventsDao();
 }
