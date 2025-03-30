@@ -20,5 +20,7 @@ public interface Constants {
                     "Always ensure the output is well-formatted JSON.\n" +
                     "Please note that the current time is: <CURRENT_DATE_TIME>";
 
+    public static final String db_name = "event-db";
+
 
 }

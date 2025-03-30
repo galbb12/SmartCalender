@@ -1,10 +1,12 @@
 package com.gal.smartcalender;
 
+import android.content.Context;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.room.Room;
 
 import com.google.gson.Gson;
 
@@ -23,20 +25,12 @@ import okhttp3.Response;
 
 // An helpful class for flowing the data through chatgpt
 public class ChatGptDataProcessor extends DataProcessor {
-
+    private final String GPT_MODEL = "gpt-3.5-turbo";
     private ChatGptApi _chatGptApi = null;
 
-    private String generate_system_message(){
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = now.format(formatter);
-
-
-        return Constants.notification_process_sys_message.replace("<CURRENT_DATE_TIME>", formattedDateTime);
-    }
-
-    ChatGptDataProcessor(){
-        this._chatGptApi = new ChatGptApi(com.gal.smartcalender.BuildConfig.CHATGPT_API_KEY, "gpt-3.5-turbo");
+    ChatGptDataProcessor(Context context){
+        super(context);
+        this._chatGptApi = new ChatGptApi(com.gal.smartcalender.BuildConfig.CHATGPT_API_KEY, GPT_MODEL);
     }
 
     //Decode the notification for chatgpt

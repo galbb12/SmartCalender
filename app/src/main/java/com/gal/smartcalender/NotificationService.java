@@ -15,7 +15,7 @@ public class NotificationService extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         // Called when a notification is posted
         if (dataProcessor == null) {
-            dataProcessor = new ChatGptDataProcessor();
+            dataProcessor = new ChatGptDataProcessor(getApplicationContext());
         }
         dataProcessor.processNotification(sbn);
     }
