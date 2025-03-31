@@ -12,6 +12,7 @@ import android.util.Pair;
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.gal.smartcalender.Constants;
 import com.gal.smartcalender.R;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
-    private static final String SELECTED_APPS_PREFERENCE  = "selected_apps";
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -31,7 +31,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     // For populating settings in the apps installed
     private void populateInstalledApps() {
-        MultiSelectListPreference appListPref = findPreference(SELECTED_APPS_PREFERENCE);
+        MultiSelectListPreference appListPref = findPreference(Constants.SELECTED_APPS_PREFERENCE);
         if (appListPref == null) return;
 
         PackageManager pm = requireContext().getPackageManager();

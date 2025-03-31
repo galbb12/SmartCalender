@@ -26,5 +26,7 @@ public interface Constants {
 
     public static final String no_event_ret = "NO_EVENT";
 
+    public static final String SELECTED_APPS_PREFERENCE  = "selected_apps";
+
 
 }

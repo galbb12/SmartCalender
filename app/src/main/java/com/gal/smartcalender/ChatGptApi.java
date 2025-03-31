@@ -17,8 +17,11 @@ public class ChatGptApi {
     private String _api_key;
     private String _model;
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
-    ChatGptApi(String api_key, String model){
+    ChatGptApi(String api_key){
         this._api_key = api_key;
+    }
+
+    void setModel(String model){
         this._model = model;
     }
 

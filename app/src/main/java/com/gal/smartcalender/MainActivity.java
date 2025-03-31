@@ -18,9 +18,6 @@ import java.util.concurrent.Executors;
 
 
 public class MainActivity extends AppCompatActivity {
-    Button send_button = null ;
-    EditText text_field_view = null;
-    ChatGptApi chatGptApi = null;
     RecyclerView recyclerView = null;
     AppDatabase db = null;
     RecyclerViewEventsAdapter recyclerViewEventsAdapter = null;
@@ -31,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, Constants.db_name).build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, Constants.db_name).build();
 
 
         recyclerView = findViewById(R.id.recyclerView);

@@ -1,10 +1,14 @@
 package com.gal.smartcalender;
 
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.preference.MultiSelectListPreference;
+import androidx.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -15,7 +19,9 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,17 +29,29 @@ import okhttp3.Response;
 
 // An helpful class for flowing the data through chatgpt
 public class ChatGptDataProcessor extends DataProcessor {
-    private final String GPT_MODEL = "gpt-3.5-turbo";
     private ChatGptApi _chatGptApi = null;
+    SharedPreferences _sharedPreferences = null;
 
     ChatGptDataProcessor(Context context){
         super(context);
-        this._chatGptApi = new ChatGptApi(com.gal.smartcalender.BuildConfig.CHATGPT_API_KEY, GPT_MODEL);
+        this._chatGptApi = new ChatGptApi(com.gal.smartcalender.BuildConfig.CHATGPT_API_KEY);
+        this._sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     //Decode the notification for chatgpt
     @Override
     public void processNotification(StatusBarNotification sbn) {
+        Set<String> selectedApps = _sharedPreferences.getStringSet("selected_apps", new HashSet<String>());
+        String aiModel = _sharedPreferences.getString("ai_model", "none");
+        if(aiModel.equals("none")){
+            Log.d("Model is none", "returning");
+            return;
+        }
+        _chatGptApi.setModel(aiModel);
+        if(!selectedApps.contains(sbn.getPackageName())){
+            Log.d("Skipped app:", sbn.getPackageName());
+            return;
+        }
         Gson gson = new Gson();
         Map<String, Object> noti_obj = new HashMap<>();
         String packageName = sbn.getPackageName();
@@ -85,7 +103,8 @@ public class ChatGptDataProcessor extends DataProcessor {
                         return;
                     }
 
-                    JsonObject jsonContent = gson.fromJson(content, JsonObject.class);
+                    String cleanedContent = content.replaceAll("```json\\n|```", "").trim();
+                    JsonObject jsonContent = gson.fromJson(cleanedContent, JsonObject.class);
 
                     Log.d("Json parsed description", jsonContent.get("description").getAsString());
                     String descriptionStr = jsonContent.get("description").getAsString();
