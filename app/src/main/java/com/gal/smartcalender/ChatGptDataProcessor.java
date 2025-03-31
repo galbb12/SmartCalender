@@ -3,27 +3,19 @@ package com.gal.smartcalender;
 import android.content.Context;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
-import androidx.room.Room;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;

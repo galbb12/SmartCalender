@@ -2,12 +2,9 @@ package com.gal.smartcalender;
 
 import android.content.Context;
 import android.service.notification.StatusBarNotification;
-import android.util.Pair;
 
 import androidx.room.Room;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;

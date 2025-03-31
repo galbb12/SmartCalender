@@ -4,7 +4,6 @@ import androidx.room.TypeConverter;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
