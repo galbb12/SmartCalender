@@ -19,9 +19,12 @@ public interface Constants {
                     "If any required field is missing in the notification, infer it based on context or use sensible defaults. " +
                     "Always ensure the output is well-formatted JSON.\n" +
                     "Please note that the current date time in UTC+0 is: <CURR_DATE_TIME>, Please note the time zone and adjust accordingly\n"+
-                    "The users notification will include times in time zone: <CURR_TIME_ZONE> if not provided please use this one, please convert accordingly";
+                    "The users notification will include times in time zone: <CURR_TIME_ZONE> if not provided please use this one, please convert accordingly\n"+
+                    "Also return NO_EVENT if there isn't an event in the notification or its not meant to be an event, Don't spam the user!" ;
 
     public static final String db_name = "event-db";
+
+    public static final String no_event_ret = "NO_EVENT";
 
 
 }

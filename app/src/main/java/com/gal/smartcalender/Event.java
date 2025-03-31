@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey;
 import androidx.room.Query;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Dao
@@ -25,7 +27,7 @@ interface EventDao {
 
 @Entity
 public class Event {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int eventId; // Database eventId
 
     @ColumnInfo(name = "DataSource") // Notification, Gmail app, whatever...
@@ -38,10 +40,10 @@ public class Event {
     public String eventInfo;
 
     @ColumnInfo(name = "StartDate") // The start date of the event
-    public LocalDateTime startDate;
+    public ZonedDateTime startDate;
 
     @ColumnInfo(name = "EndDate") // The end date of the event
-    public LocalDateTime endDate;
+    public ZonedDateTime endDate;
 
     @ColumnInfo(name = "Urgency") // Score 0-1 on how urgent is the event
     public float urgency;
