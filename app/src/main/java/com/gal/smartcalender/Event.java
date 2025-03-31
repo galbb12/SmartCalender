@@ -14,13 +14,13 @@ import java.util.List;
 @Dao
 interface EventDao {
     @Query("SELECT * FROM Event")
-    List<Event> getAll();
+    public List<Event> getAll();
 
     @Insert
-    void insertAll(Event... events);
+    public void insertAll(Event... events);
 
     @Delete
-    void delete(Event event);
+    public void delete(Event event);
 }
 
 @Entity

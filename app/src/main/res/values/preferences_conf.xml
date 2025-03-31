@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="model_options">
+        <item>GPT-4o</item>
+        <item>GPT-4o-mini</item>
+        <item>GPT-3.5 Turbo</item>
+        <item>GPT-3.5 Turbo Instruct</item>
+        <item>GPT-3.5 Turbo 16k</item>
+        <item>Text-Davinci-003</item>
+        <item>Text-Davinci-002</item>
+        <item>Text-Davinci-001</item>
+        <item>Text-Curie-001</item>
+        <item>Text-Babbage-001</item>
+        <item>Text-Ada-001</item>
+        <item>None(Turn the app off)</item>
+    </string-array>
+    <string-array name="model_values">
+        <item>gpt-4o</item>
+        <item>gpt-4o-mini</item>
+        <item>gpt-3.5-turbo</item>
+        <item>gpt-3.5-turbo-instruct</item>
+        <item>gpt-3.5-turbo-16k</item>
+        <item>text-davinci-003</item>
+        <item>text-davinci-002</item>
+        <item>text-davinci-001</item>
+        <item>text-curie-001</item>
+        <item>text-babbage-001</item>
+        <item>text-ada-001</item>
+        <item>none</item>
+    </string-array>
+    <string-array name="default_apps">
+    </string-array>
+</resources>

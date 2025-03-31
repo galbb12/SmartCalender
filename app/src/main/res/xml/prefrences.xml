@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:key="ai_model"
+        app:title="AI model"
+        app:dialogTitle="Choose a model"
+        app:entries="@array/model_options"
+        app:entryValues="@array/model_values"
+        app:defaultValue="gpt-4o-mini"/>
+
+    <MultiSelectListPreference
+        app:key="selected_apps"
+        app:title="Select Apps to process notifications from"
+        app:dialogTitle="Choose apps"
+        app:defaultValue="@array/default_apps" />
+
+</PreferenceScreen>
