@@ -38,7 +38,10 @@ public class ChatGptDataProcessor extends DataProcessor {
         this._sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    //Decode the notification for chatgpt
+    /**
+     * Encode the notification for chatgpt
+     * @param sbn The received status bar notification
+     */
     @Override
     public void processNotification(StatusBarNotification sbn) {
         Set<String> selectedApps = _sharedPreferences.getStringSet("selected_apps", new HashSet<String>());
@@ -72,7 +75,7 @@ public class ChatGptDataProcessor extends DataProcessor {
         Object[] messages = new Object[]{
                 new HashMap<String, String>() {{
                     put("role", "system");
-                    put("content", generate_system_message());
+                    put("content", LLMUtils.generate_system_message());
                 }},
                 new HashMap<String, String>() {{
                     put("role", "user");
@@ -88,7 +91,7 @@ public class ChatGptDataProcessor extends DataProcessor {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
+                /*Decode chatgpt json*/
                 Gson gson = new Gson();
                 if(response.body() != null){
                     String resp = response.body().string();
@@ -103,7 +106,7 @@ public class ChatGptDataProcessor extends DataProcessor {
                         return;
                     }
 
-                    String cleanedContent = content.replaceAll("```json\\n|```", "").trim();
+                    String cleanedContent = content.replaceAll("```json\\n|```", "").trim(); // Newer models might add this tag, remove it.
                     JsonObject jsonContent = gson.fromJson(cleanedContent, JsonObject.class);
 
                     Log.d("Json parsed description", jsonContent.get("description").getAsString());
