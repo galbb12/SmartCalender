@@ -7,6 +7,16 @@
     android:background="@drawable/futuristic_item_background"
     android:elevation="8dp">
 
+    <!-- Existing CheckBox and TextView Layouts (no changes) -->
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select"
+        android:textColor="@color/white"
+        android:buttonTint="@color/white" />
+
     <TextView
         android:id="@+id/eventDescription"
         android:layout_width="wrap_content"
@@ -27,7 +37,6 @@
             android:id="@+id/urgency_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
             android:text="Urgency:"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -37,7 +46,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:text="0.5"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -46,8 +54,7 @@
             android:id="@+id/importance_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
             android:text="Importance:"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -57,7 +64,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:text="0.5"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -76,7 +82,7 @@
             android:layout_height="wrap_content"
             android:text="2025-03-31 10:00 AM"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/arrowIcon"
@@ -93,6 +99,18 @@
             android:layout_height="wrap_content"
             android:text="2025-03-31 12:00 PM"
             android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:textSize="14sp"/>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/addToCalendarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/black"
+        app:backgroundTint="@null"
+        android:text="Add to Calendar"
+        android:textColor="@color/white" />
+
 </LinearLayout>
