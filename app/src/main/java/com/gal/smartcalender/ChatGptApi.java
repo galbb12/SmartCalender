@@ -17,14 +17,26 @@ public class ChatGptApi {
     private String _api_key;
     private String _model;
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+
+    /**
+     *  Constructor, init the api key
+     */
     ChatGptApi(String api_key){
         this._api_key = api_key;
     }
 
+    /**
+     *  Setter function for the model
+     */
     void setModel(String model){
         this._model = model;
     }
 
+    /**
+     *  Function to send a query, and run a callback on success.
+     * @param messages a JsonArray(Object[]) of the messages field in the OpenAI completion API
+     * @param callback an okhttp callback object, allows to control what happens when the response is received
+     */
     public void sendQuery(Object[] messages , Callback callback) {
         OkHttpClient client = new OkHttpClient();
 
