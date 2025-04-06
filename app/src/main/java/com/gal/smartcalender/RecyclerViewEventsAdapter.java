@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerViewEventsAdapter.ViewHolder> {
     private final Event[] _localDataSet;
-    private static ArrayList<Event> _checked_events;
+    private static ArrayList<Event> _checked_events = null;
 
 
     public static String ZonedDateTimeToHumanReadableStr(ZonedDateTime zonedDateTime) {
@@ -66,6 +66,9 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
             eventEndDate.setText(ZonedDateTimeToHumanReadableStr(event.endDate));
             eventImportance.setText(String.valueOf(event.importance));
             eventUrgency.setText(String.valueOf(event.urgency));
+            if(_checked_events == null){
+                _checked_events = new ArrayList<Event>();
+            }
             checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
                 if(b){
                     _checked_events.add(event);

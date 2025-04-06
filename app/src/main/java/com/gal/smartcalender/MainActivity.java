@@ -2,12 +2,10 @@ package com.gal.smartcalender;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,10 +21,14 @@ public class MainActivity extends AppCompatActivity {
     RecyclerViewEventsAdapter recyclerViewEventsAdapter = null;
     Toolbar toolbar = null;
 
+    ImageButton moreButton = null;
+
+    CheckBox selectAll = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, Constants.db_name).build();
 
@@ -34,7 +36,25 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         toolbar = findViewById(R.id.toolbar);
+        selectAll = findViewById(R.id.select_all);
+        moreButton = findViewById(R.id.more_button);
         setSupportActionBar(toolbar);
+
+        moreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, com.gal.smartcalender.Settings.SettingsActivity.class));
+            }
+        });
+        selectAll.setOnCheckedChangeListener((compoundButton, b) -> {
+            if(recyclerViewEventsAdapter != null){
+                if(b){
+                    recyclerViewEventsAdapter.selectAll();
+                }else{
+                    recyclerViewEventsAdapter.clearSelection();
+                }
+            }
+        });
 
         Executors.newSingleThreadExecutor().execute(() -> {
             Event[] events = db.EventsDao().getAll().toArray(new Event[0]);
@@ -43,23 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 recyclerView.setAdapter(recyclerViewEventsAdapter);
             });
         });
-
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar, menu); // Add settings and other stuff to toolbar
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Call settings activity
-        if (item.getItemId() == R.id.action_settings) {
-            startActivity(new Intent(this, com.gal.smartcalender.Settings.SettingsActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 

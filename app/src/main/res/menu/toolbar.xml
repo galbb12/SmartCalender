@@ -6,6 +6,6 @@
         android:title="Settings"
         android:icon="@drawable/round_app_settings_alt_24"
         android:iconTint="@color/white"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
         app:showAsAction="ifRoom|withText" />
 </menu>

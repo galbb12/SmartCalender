@@ -35,50 +35,29 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (appListPref == null) return;
 
         PackageManager pm = requireContext().getPackageManager();
-
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
         List<ResolveInfo> pkgAppsList = pm.queryIntentActivities(mainIntent, PackageManager.GET_META_DATA);
 
-        List<String> packageNames = new ArrayList<>();
-        List<String> appNames = new ArrayList<>();
-
-        for (ResolveInfo resolveInfo : pkgAppsList) {
-            String appName = pm.getApplicationLabel(resolveInfo.activityInfo.applicationInfo).toString();
-            String packageName = resolveInfo.activityInfo.packageName;
-
-            packageNames.add(packageName);
-            appNames.add(appName);
-        }
-
-        // Create list of pairs inorder to sort both in the same order
-        List<Pair<String, String>> appPackagePairs = new ArrayList<>();
-        for (int i = 0; i < appNames.size(); i++) {
-            appPackagePairs.add(new Pair<>(appNames.get(i), packageNames.get(i)));
-        }
-
-        // Sort the pairs by the app name (alphabetically)
-        Collections.sort(appPackagePairs, new Comparator<Pair<String, String>>() {
-            @Override
-            public int compare(Pair<String, String> pair1, Pair<String, String> pair2) {
-                return pair1.first.compareTo(pair2.first); // Compare by appName (first element)
-            }
+        // Sort the list of ResolveInfo objects directly using their app labels
+        pkgAppsList.sort((r1, r2) -> {
+            String label1 = pm.getApplicationLabel(r1.activityInfo.applicationInfo).toString();
+            String label2 = pm.getApplicationLabel(r2.activityInfo.applicationInfo).toString();
+            return label1.compareToIgnoreCase(label2);
         });
 
-        List<String> packageNamesSort = new ArrayList<>();
-        List<String> appNamesSort = new ArrayList<>();
+        int size = pkgAppsList.size();
+        String[] appNames = new String[size];
+        String[] packageNames = new String[size];
 
-        // After sorting, extract the sorted appNames and packageNames
-        appNames.clear();
-        packageNames.clear();
-        for (Pair<String, String> pair : appPackagePairs) {
-            appNamesSort.add(pair.first);
-            packageNamesSort.add(pair.second);
+        for (int i = 0; i < size; i++) {
+            ResolveInfo info = pkgAppsList.get(i);
+            appNames[i] = pm.getApplicationLabel(info.activityInfo.applicationInfo).toString();
+            packageNames[i] = info.activityInfo.packageName;
         }
 
-        // Set the sorted entries and entry values in the preference
-        appListPref.setEntries(appNamesSort.toArray(new String[0]));
-        appListPref.setEntryValues(packageNamesSort.toArray(new String[0]));
+        appListPref.setEntries(appNames);
+        appListPref.setEntryValues(packageNames);
     }
 }
