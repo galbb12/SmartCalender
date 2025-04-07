@@ -27,21 +27,19 @@ public class MainActivity extends AppCompatActivity {
     AppDatabase db = null;
     RecyclerViewEventsAdapter recyclerViewEventsAdapter = null;
     Toolbar toolbar = null;
-
     ImageButton moreButton = null;
-
     CheckBox selectAll = null;
-
     FloatingActionButton deleteButton = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Initialize the database
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, Constants.db_name).build();
 
-
+        // Initialize UI components
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         toolbar = findViewById(R.id.toolbar);
@@ -49,54 +47,35 @@ public class MainActivity extends AppCompatActivity {
         moreButton = findViewById(R.id.more_button);
         setSupportActionBar(toolbar);
 
-        moreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, com.gal.smartcalender.Settings.SettingsActivity.class));
+        // Setup more button click listener
+        moreButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, com.gal.smartcalender.Settings.SettingsActivity.class)));
+
+        // Initialize the adapter and observe LiveData
+        db.EventsDao().getAllLive().observe(this, events -> {
+            if (recyclerViewEventsAdapter == null) {
+                recyclerViewEventsAdapter = new RecyclerViewEventsAdapter((ArrayList<Event>) events, findViewById(R.id.select_all));
+                recyclerView.setAdapter(recyclerViewEventsAdapter);
+            }
+            recyclerViewEventsAdapter.set_localDataSet(new ArrayList<>(events)); // Update data without resetting the adapter
+        });
+
+        // Handle select all checkbox
+        selectAll.setOnClickListener(v -> {
+            if (((CheckBox) v).isChecked()) {
+                recyclerViewEventsAdapter.selectAll();
+            } else {
+                recyclerViewEventsAdapter.clearSelection();
             }
         });
 
-        db.EventsDao().getAllLive().observe(this, new Observer<List<Event>>() {
-            //            Auto update events
-            @Override
-            public void onChanged(@Nullable List<Event> events) {
-                Executors.newSingleThreadExecutor().execute(() -> {
-                    runOnUiThread(() -> {
-                        if (recyclerViewEventsAdapter == null) {
-                            recyclerViewEventsAdapter = new RecyclerViewEventsAdapter((ArrayList<Event>) events, findViewById(R.id.select_all));
-                            recyclerView.setAdapter(recyclerViewEventsAdapter);
-                        }
-                        recyclerViewEventsAdapter.set_localDataSet((ArrayList<Event>) events);
-                    });
-                });
-            }
-        });
-        selectAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    recyclerViewEventsAdapter.selectAll();
-                } else {
-                    recyclerViewEventsAdapter.clearSelection();
-                }
-            }
-        });
+        // Setup delete button
         deleteButton = findViewById(R.id.deleteButton);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Executors.newSingleThreadExecutor().execute(() -> {
-                    for (Event event : recyclerViewEventsAdapter.get_checked_events()) {
-                        db.EventsDao().delete(event);
-                    }
-                });
-            }
+        deleteButton.setOnClickListener(v -> {
+            Executors.newSingleThreadExecutor().execute(() -> {
+                for (Event event : recyclerViewEventsAdapter.get_checked_events()) {
+                    db.EventsDao().delete(event); // Delete selected events from the database
+                }
+            });
         });
-
-
     }
-
-
 }
-
-
