@@ -32,7 +32,7 @@ public class ChatGptDataProcessor extends DataProcessor {
     private ChatGptApi _chatGptApi = null;
     SharedPreferences _sharedPreferences = null;
 
-    ChatGptDataProcessor(Context context){
+    ChatGptDataProcessor(Context context) {
         super(context);
         this._chatGptApi = new ChatGptApi(com.gal.smartcalender.BuildConfig.CHATGPT_API_KEY);
         this._sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -40,18 +40,19 @@ public class ChatGptDataProcessor extends DataProcessor {
 
     /**
      * Encode the notification for chatgpt
+     *
      * @param sbn The received status bar notification
      */
     @Override
     public void processNotification(StatusBarNotification sbn) {
         Set<String> selectedApps = _sharedPreferences.getStringSet("selected_apps", new HashSet<String>());
         String aiModel = _sharedPreferences.getString("ai_model", "none");
-        if(aiModel.equals("none")){
+        if (aiModel.equals("none")) {
             Log.d("Model is none", "returning");
             return;
         }
         _chatGptApi.setModel(aiModel);
-        if(!selectedApps.contains(sbn.getPackageName())){
+        if (!selectedApps.contains(sbn.getPackageName())) {
             Log.d("Skipped app:", sbn.getPackageName());
             return;
         }
@@ -62,7 +63,7 @@ public class ChatGptDataProcessor extends DataProcessor {
         noti_obj.put("package name", packageName);
         for (String key : sbn.getNotification().extras.keySet()) {
             Object value = sbn.getNotification().extras.get(key);
-            if(value != null){
+            if (value != null) {
                 Log.d(key, value.toString());
                 noti_obj.put(key, value.toString());
             }
@@ -92,45 +93,55 @@ public class ChatGptDataProcessor extends DataProcessor {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 /*Decode chatgpt json*/
-                Gson gson = new Gson();
-                if(response.body() != null){
-                    String resp = response.body().string();
-                    Log.d("response:", resp);
-                    JsonObject jsonObject = JsonParser.parseString(resp).getAsJsonObject();
-                    JsonArray choices = jsonObject.getAsJsonArray("choices");
-                    JsonObject firstChoice = choices.get(0).getAsJsonObject();
-                    JsonObject message = firstChoice.getAsJsonObject("message");
-                    String content = message.get("content").getAsString();
-                    if(content.equals(Constants.no_event_ret)){
-                        Log.d("ChatGpt saied:", "No event");
-                        return;
-                    }
-
-                    String cleanedContent = content.replaceAll("```json\\n|```", "").trim(); // Newer models might add this tag, remove it.
-                    JsonObject jsonContent = gson.fromJson(cleanedContent, JsonObject.class);
-
-                    Log.d("Json parsed description", jsonContent.get("description").getAsString());
-                    String descriptionStr = jsonContent.get("description").getAsString();
-                    String startDateStr = jsonContent.get("start_date").getAsString();
-                    String endDateStr = jsonContent.get("end_date").getAsString();
-                    String urgencyStr = jsonContent.get("urgency").getAsString();
-                    String importanceStr = jsonContent.get("importance").getAsString();
-
-                    Event event = new Event();
-                    event.data = resp;
-                    event.dataSource = "notification";
-                    event.eventInfo = descriptionStr;
-                    event.urgency = Float.parseFloat(urgencyStr);
-                    event.importance = Float.parseFloat(importanceStr);
-                    event.startDate = ZonedDateTime.parse(startDateStr, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-                    event.endDate = ZonedDateTime.parse(endDateStr, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-                    _db.EventsDao().insertAll(event);
-
-
-                }
+                decodeGptResponse(response);
             }
         });
 
 
+    }
+
+    private void decodeGptResponse(Response response) {
+        try {
+            Gson gson = new Gson();
+            if (response.body().equals(Constants.no_event_ret)) {
+                return;
+            }
+            if (response.body() != null) {
+                String resp = response.body().string();
+                Log.d("response:", resp);
+                JsonObject jsonObject = JsonParser.parseString(resp).getAsJsonObject();
+                JsonArray choices = jsonObject.getAsJsonArray("choices");
+                JsonObject firstChoice = choices.get(0).getAsJsonObject();
+                JsonObject message = firstChoice.getAsJsonObject("message");
+                String content = message.get("content").getAsString();
+                if (content.contains(Constants.no_event_ret)) {
+                    Log.d("ChatGpt saied:", "No event");
+                    return;
+                }
+
+                String cleanedContent = content.replaceAll("```json\\n|```", "").trim(); // Newer models might add this tag, remove it.
+                JsonObject jsonContent = gson.fromJson(cleanedContent, JsonObject.class);
+
+                Log.d("Json parsed description", jsonContent.get("description").getAsString());
+                String descriptionStr = jsonContent.get("description").getAsString();
+                String startDateStr = jsonContent.get("start_date").getAsString();
+                String endDateStr = jsonContent.get("end_date").getAsString();
+                String urgencyStr = jsonContent.get("urgency").getAsString();
+                String importanceStr = jsonContent.get("importance").getAsString();
+
+
+                Event event = new Event();
+                event.data = resp;
+                event.dataSource = "notification";
+                event.eventInfo = descriptionStr;
+                event.urgency = Float.parseFloat(urgencyStr);
+                event.importance = Float.parseFloat(importanceStr);
+                event.startDate = ZonedDateTime.parse(startDateStr, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+                event.endDate = ZonedDateTime.parse(endDateStr, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+                _db.EventsDao().insertAll(event);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

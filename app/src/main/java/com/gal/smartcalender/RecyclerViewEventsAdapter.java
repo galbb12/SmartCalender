@@ -1,5 +1,8 @@
 package com.gal.smartcalender;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.util.ArraySet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +12,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 
 public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerViewEventsAdapter.ViewHolder> {
-    private final Event[] _localDataSet;
-    private static ArrayList<Event> _checked_events = null;
+    private static ArrayList<Event> _localDataSet;
+    private static ArraySet<Event> _checked_events = null;
 
+    private static CheckBox _selectAllCheckBox = null;
 
     public static String ZonedDateTimeToHumanReadableStr(ZonedDateTime zonedDateTime) {
         ZonedDateTime systemZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
@@ -26,19 +32,23 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
         return systemZonedDateTime.format(formatter);
     }
 
-    public ArrayList<Event> get_checked_events(){
+    public ArraySet<Event> get_checked_events() {
         return _checked_events;
     }
 
     public void clearSelection() {
         _checked_events.clear();
-        notifyDataSetChanged();
+        new Handler(Looper.getMainLooper()).post(this::notifyDataSetChanged);
     }
 
     public void selectAll() {
         _checked_events.clear();
-        _checked_events.addAll(Arrays.asList(_localDataSet));
-        notifyDataSetChanged();
+        _checked_events.addAll(_localDataSet);
+        new Handler(Looper.getMainLooper()).post(this::notifyDataSetChanged);
+    }
+
+    public static boolean isAllSelected() {
+        return _checked_events.size() == _localDataSet.size();
     }
 
 
@@ -66,28 +76,40 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
             eventEndDate.setText(ZonedDateTimeToHumanReadableStr(event.endDate));
             eventImportance.setText(String.valueOf(event.importance));
             eventUrgency.setText(String.valueOf(event.urgency));
-            if(_checked_events == null){
-                _checked_events = new ArrayList<Event>();
+            if (_checked_events == null) {
+                _checked_events = new ArraySet<Event>();
             }
-            checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
-                if(b){
-                    _checked_events.add(event);
-                }else{
-                    if(_checked_events.contains(event)){
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(((CheckBox)v).isChecked()) {
+                        _checked_events.add(event);
+                    }else{
                         _checked_events.remove(event);
+                    }
+                    if (isAllSelected()) {
+                        _selectAllCheckBox.setChecked(true);
+                    } else {
+                        _selectAllCheckBox.setChecked(false);
                     }
                 }
             });
-            if(_checked_events.contains(event)){
+            if (_checked_events.contains(event)) {
                 checkBox.setChecked(true);
-            } else{
+            } else {
                 checkBox.setChecked(false);
             }
         }
     }
 
-    public RecyclerViewEventsAdapter(Event[] dataSet) {
+    public RecyclerViewEventsAdapter(ArrayList<Event> dataSet, CheckBox selectAllCheckBox) {
         _localDataSet = dataSet;
+        _selectAllCheckBox = selectAllCheckBox;
+    }
+
+    public void set_localDataSet(ArrayList<Event> dataSet){
+        _localDataSet = dataSet;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -100,11 +122,11 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        viewHolder.bind(_localDataSet[position]);
+        viewHolder.bind(_localDataSet.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return _localDataSet.length;
+        return _localDataSet.size();
     }
 }

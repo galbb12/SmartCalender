@@ -1,5 +1,6 @@
 package com.gal.smartcalender;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -21,6 +22,9 @@ interface EventDao {
 
     @Delete
     public void delete(Event event);
+
+    @Query("select * from Event")
+    public LiveData<List<Event>> getAllLive();
 }
 
 @Entity
