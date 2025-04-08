@@ -1,5 +1,8 @@
 package com.gal.smartcalender;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.util.ArraySet;
@@ -11,6 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -25,6 +30,8 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
     private static ArraySet<Event> _checked_events = null;
 
     private static CheckBox _selectAllCheckBox = null;
+
+    private static FloatingActionButton _deleteButton = null;
 
     public static String ZonedDateTimeToHumanReadableStr(ZonedDateTime zonedDateTime) {
         ZonedDateTime systemZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
@@ -92,6 +99,11 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
                     } else {
                         _selectAllCheckBox.setChecked(false);
                     }
+                    if(_checked_events.size() == 0){
+                        _deleteButton.setVisibility(GONE);
+                    }else{
+                        _deleteButton.setVisibility(VISIBLE);
+                    }
                 }
             });
             if (_checked_events.contains(event)) {
@@ -102,9 +114,11 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    public RecyclerViewEventsAdapter(ArrayList<Event> dataSet, CheckBox selectAllCheckBox) {
+    public RecyclerViewEventsAdapter(ArrayList<Event> dataSet, CheckBox selectAllCheckBox, FloatingActionButton deleteButton) {
         _localDataSet = dataSet;
         _selectAllCheckBox = selectAllCheckBox;
+        _deleteButton = deleteButton;
+        _deleteButton.setVisibility(GONE);
     }
 
     public void set_localDataSet(ArrayList<Event> dataSet){

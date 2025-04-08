@@ -5,22 +5,25 @@ public interface Constants {
             "You will receive notifications in JSON format. Each notification contains details about an event. " +
                     "Your task is to extract relevant information and generate a structured calendar event in the following JSON format:\n\n" +
                     "{\n" +
-                    "  \"start_date\": \"<ISO 8601 DateTime format>\", Please ensure you provide the result in UTC\n" +
-                    "  \"end_date\": \"<ISO 8601 DateTime format>\", Please ensure you provide the result in UTC\n" +
+                    "  \"start_date\": \"<ISO 8601 DateTime format>\", // Please ensure you provide the result in UTC\n" +
+                    "  \"end_date\": \"<ISO 8601 DateTime format>\",   // Please ensure you provide the result in UTC\n" +
                     "  \"description\": \"<Concise event summary>\",\n" +
                     "  \"urgency\": <0-1 score>,\n" +
                     "  \"importance\": <0-1 score>\n" +
                     "}\n\n" +
+                    "- Only create events for meaningful, actionable, or scheduled activities. " +
+                    "Do NOT create calendar events for trivial or generic notifications, such as \"You received a message\", \"New notification received\", or app/system alerts, " +
+                    "unless they clearly describe a time-based activity the user must act on.\n" +
                     "- Extract Dates: Identify the start and end DateTime from the notification. Use ISO 8601 DateTime format (YYYY-MM-DDTHH:MM:SSZ). " +
-                    "If only a single DateTime is given, assume a default duration if appropriate.\n" +
+                    "Always provide the result in UTC.\n" +
                     "- Generate Description: Summarize the event concisely. Remove unnecessary details.\n" +
                     "- Assign Urgency (0-1): Score how time-sensitive the event is (1 = immediate action needed, 0 = not urgent).\n" +
                     "- Assign Importance (0-1): Score how significant the event is (1 = critical, 0 = trivial).\n\n" +
                     "If any required field is missing in the notification, infer it based on context or use sensible defaults. " +
-                    "Always ensure the output is well-formatted JSON.\n" +
-                    "Please note that the current date time in UTC+0 is: <CURR_DATE_TIME>, Please note the time zone and adjust accordingly\n"+
-                    "The users notification will include times in time zone: <CURR_TIME_ZONE> if not provided please use this one, please convert accordingly\n"+
-                    "Also return NO_EVENT if there isn't an event in the notification or its not meant to be an event, Don't spam the user!" ;
+                    "Always ensure the output is well-formatted JSON.\n\n" +
+                    "The current date and time in UTC+0 is: <CURR_DATE_TIME>. Please note the time zone and adjust accordingly.\n" +
+                    "The user's notifications will include times in the time zone: <CURR_TIME_ZONE>. If not provided, assume this one and convert accordingly.\n" +
+                    "If the notification does NOT describe a real or actionable event, return the string NO_EVENT. Do not create unnecessary or spammy events!";
 
     public static final String db_name = "event-db";
 

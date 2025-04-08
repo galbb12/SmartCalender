@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:text="Select all"
             android:layout_gravity="end"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/white"
+            android:buttonTint="@color/white" />
 
 
 

@@ -1,5 +1,8 @@
 package com.gal.smartcalender;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     CheckBox selectAll = null;
     FloatingActionButton deleteButton = null;
 
+    CheckBox selectAllCheckbox = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         selectAll = findViewById(R.id.select_all);
         moreButton = findViewById(R.id.more_button);
+        selectAllCheckbox = findViewById(R.id.select_all);
         setSupportActionBar(toolbar);
 
         // Setup more button click listener
@@ -53,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize the adapter and observe LiveData
         db.EventsDao().getAllLive().observe(this, events -> {
             if (recyclerViewEventsAdapter == null) {
-                recyclerViewEventsAdapter = new RecyclerViewEventsAdapter((ArrayList<Event>) events, findViewById(R.id.select_all));
+                recyclerViewEventsAdapter = new RecyclerViewEventsAdapter((ArrayList<Event>) events, selectAllCheckbox, deleteButton);
                 recyclerView.setAdapter(recyclerViewEventsAdapter);
             }
             recyclerViewEventsAdapter.set_localDataSet(new ArrayList<>(events)); // Update data without resetting the adapter
@@ -65,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
                 recyclerViewEventsAdapter.selectAll();
             } else {
                 recyclerViewEventsAdapter.clearSelection();
+            }
+            if(recyclerViewEventsAdapter.get_checked_events().size() == 0){
+                deleteButton.setVisibility(GONE);
+            }else{
+                deleteButton.setVisibility(VISIBLE);
             }
         });
 
