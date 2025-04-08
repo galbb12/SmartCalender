@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- AI Settings -->
     <PreferenceCategory app:title="AI Settings">
@@ -26,5 +27,10 @@
             app:summary="Select which apps should be processed"/>
 
     </PreferenceCategory>
+
+    <Preference
+        android:key="open_about_activity"
+        android:title="Open the about page"
+        android:summary="Tap to open the about page" />
 
 </PreferenceScreen>

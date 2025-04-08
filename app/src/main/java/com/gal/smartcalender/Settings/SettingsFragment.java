@@ -10,8 +10,10 @@ import android.util.Log;
 import android.util.Pair;
 
 import androidx.preference.MultiSelectListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.gal.smartcalender.AboutActivity;
 import com.gal.smartcalender.Constants;
 import com.gal.smartcalender.R;
 
@@ -26,6 +28,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.prefrences, rootKey);
         populateInstalledApps();
+        Preference openAboutActivityPref = findPreference("open_about_activity");
+        if (openAboutActivityPref != null) {
+            openAboutActivityPref.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(getActivity(), AboutActivity.class);
+                startActivity(intent);
+                return true; // Return true to indicate the click was handled
+            });
+        }
     }
 
 
@@ -60,4 +70,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         appListPref.setEntries(appNames);
         appListPref.setEntryValues(packageNames);
     }
+
+
 }

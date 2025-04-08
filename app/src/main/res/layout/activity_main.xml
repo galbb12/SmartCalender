@@ -28,6 +28,18 @@
             android:layout_gravity="end"
             android:background="@android:color/transparent"
             android:layout_marginHorizontal="16dp"/>
+<!--        <ImageButton-->
+<!--            android:id="@+id/chart_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+
+<!--            android:layout_gravity="end"-->
+<!--            android:layout_marginHorizontal="16dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:src="@drawable/baseline_add_chart_24"-->
+<!--            app:tint="@color/white"-->
+<!--            tools:layout_editor_absoluteX="16dp"-->
+<!--            tools:layout_editor_absoluteY="22dp" />-->
         <CheckBox
             android:id="@+id/select_all"
             android:layout_width="wrap_content"
