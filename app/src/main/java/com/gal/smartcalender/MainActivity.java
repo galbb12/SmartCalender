@@ -56,15 +56,6 @@ public class MainActivity extends AppCompatActivity {
         // Setup more button click listener
         moreButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, com.gal.smartcalender.Settings.SettingsActivity.class)));
 
-        // Initialize the adapter and observe LiveData
-        db.EventsDao().getAllLive().observe(this, events -> {
-            if (recyclerViewEventsAdapter == null) {
-                recyclerViewEventsAdapter = new RecyclerViewEventsAdapter((ArrayList<Event>) events, selectAllCheckbox, deleteButton);
-                recyclerView.setAdapter(recyclerViewEventsAdapter);
-            }
-            recyclerViewEventsAdapter.set_localDataSet(new ArrayList<>(events)); // Update data without resetting the adapter
-        });
-
         // Handle select all checkbox
         selectAll.setOnClickListener(v -> {
             if (((CheckBox) v).isChecked()) {
@@ -88,5 +79,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
+        observeData();
+    }
+
+    void observeData(){
+        db.EventsDao().getAllLive().observe(this, events -> {
+            if (recyclerViewEventsAdapter == null) {
+                recyclerViewEventsAdapter = new RecyclerViewEventsAdapter((ArrayList<Event>) events, selectAllCheckbox, deleteButton);
+                recyclerView.setAdapter(recyclerViewEventsAdapter);
+            }
+            recyclerViewEventsAdapter.set_localDataSet(new ArrayList<>(events)); // Update data without resetting the adapter
+        });
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        observeData();
     }
 }

@@ -5,6 +5,7 @@ import android.service.notification.StatusBarNotification;
 
 import androidx.room.Room;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -28,8 +29,10 @@ public class LLMUtils {
      * */
     static protected String generate_system_message() {
         ZonedDateTime zonedDateTimeUTC = ZonedDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime zonedDateTimeCURR = ZonedDateTime.now();
+        String iso8601LOCAL = zonedDateTimeCURR.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
         String iso8601UTC = zonedDateTimeUTC.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
-        return Constants.notification_process_sys_message.replace("<CURR_DATE_TIME>", iso8601UTC).replace("<CURR_TIME_ZONE>", get_curr_time_zone());
+        return Constants.notification_process_sys_message.replace("<CURR_DATE_TIME_UTC>", iso8601UTC).replace("<CURR_TIME_ZONE>", get_curr_time_zone()).replace("<CURR_DATE_TIME>", iso8601LOCAL);
     }
 
 }
