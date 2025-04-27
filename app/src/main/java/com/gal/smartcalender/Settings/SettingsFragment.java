@@ -15,6 +15,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.gal.smartcalender.AboutActivity;
 import com.gal.smartcalender.Constants;
+import com.gal.smartcalender.EditSystemPromptActivity;
 import com.gal.smartcalender.R;
 
 import java.util.ArrayList;
@@ -32,6 +33,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (openAboutActivityPref != null) {
             openAboutActivityPref.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(getActivity(), AboutActivity.class);
+                startActivity(intent);
+                return true; // Return true to indicate the click was handled
+            });
+        }
+        Preference openSysPromptEditActivityPref = findPreference("open_system_prompt_edit_activity");
+        if (openSysPromptEditActivityPref != null) {
+            openSysPromptEditActivityPref.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(getActivity(), EditSystemPromptActivity.class);
                 startActivity(intent);
                 return true; // Return true to indicate the click was handled
             });

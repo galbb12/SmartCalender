@@ -29,6 +29,11 @@
     </PreferenceCategory>
 
     <Preference
+        android:key="open_system_prompt_edit_activity"
+        android:title="Open the edit system prompt"
+        android:summary="Tap to edit system prompt" />
+
+    <Preference
         android:key="open_about_activity"
         android:title="Open the about page"
         android:summary="Tap to open the about page" />

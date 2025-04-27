@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
+
+    <!-- Info/Instruction Text -->
+    <TextView
+        android:id="@+id/infoText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit the system prompt below.\n\nAvailable placeholders:\n&lt;CURR_DATE&gt; - Will be replaced with the current date\n&lt;USER_NAME&gt; - Will be replaced with the user’s name"
+        android:textSize="16sp"
+        android:textColor="#DDDDDD"
+        android:paddingBottom="12dp" />
+
+    <!-- Editable Prompt Text -->
+    <EditText
+        android:id="@+id/promptEditText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/calendar_prompt"
+        android:padding="12dp"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:overScrollMode="always"
+        android:scrollbars="vertical" />
+
+    <!-- Buttons Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#444444"
+            android:layout_marginEnd="12dp" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#1E88E5" />
+    </LinearLayout>
+</LinearLayout>

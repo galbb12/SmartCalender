@@ -4,20 +4,18 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-import java.util.Objects;
-
 public class NotificationService extends NotificationListenerService {
 
     private static final String TAG = "NotificationListener";
-    private DataProcessor dataProcessor = null;
+    private DataProcessor _dataProcessor = null;
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         // Called when a notification is posted
-        if (dataProcessor == null) {
-            dataProcessor = new ChatGptDataProcessor(getApplicationContext());
+        if (_dataProcessor == null) {
+            _dataProcessor = new ChatGptDataProcessor(getApplicationContext());
         }
-        dataProcessor.processNotification(sbn);
+        _dataProcessor.processNotification(sbn);
     }
 
     @Override

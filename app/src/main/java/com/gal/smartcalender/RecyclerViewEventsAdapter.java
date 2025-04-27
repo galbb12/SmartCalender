@@ -9,8 +9,10 @@ import android.util.ArraySet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +35,8 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
 
     private static FloatingActionButton _deleteButton = null;
 
+    private static CalenderManager calenderManager = null;
+
     public static String ZonedDateTimeToHumanReadableStr(ZonedDateTime zonedDateTime) {
         ZonedDateTime systemZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
@@ -44,14 +48,18 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public void clearSelection() {
-        _checked_events.clear();
-        new Handler(Looper.getMainLooper()).post(this::notifyDataSetChanged);
+        if(_checked_events != null){
+            _checked_events.clear();
+            new Handler(Looper.getMainLooper()).post(this::notifyDataSetChanged);
+        }
     }
 
     public void selectAll() {
-        _checked_events.clear();
-        _checked_events.addAll(_localDataSet);
-        new Handler(Looper.getMainLooper()).post(this::notifyDataSetChanged);
+        if(_checked_events != null){
+            _checked_events.clear();
+            _checked_events.addAll(_localDataSet);
+            new Handler(Looper.getMainLooper()).post(this::notifyDataSetChanged);
+        }
     }
 
     public static boolean isAllSelected() {
@@ -66,6 +74,7 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
         private final TextView eventImportance;
         private final TextView eventUrgency;
         private final CheckBox checkBox;
+        private final Button addToCalenderButton;
 
         public ViewHolder(View view) {
             super(view);
@@ -75,6 +84,10 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
             eventImportance = view.findViewById(R.id.importance);
             eventUrgency = view.findViewById(R.id.urgency);
             checkBox = view.findViewById(R.id.checkBox);
+            addToCalenderButton = view.findViewById(R.id.addToCalendarButton);
+            if(calenderManager == null){
+                calenderManager = new CalenderManager(view.getContext());
+            }
         }
 
         public void bind(Event event) {
