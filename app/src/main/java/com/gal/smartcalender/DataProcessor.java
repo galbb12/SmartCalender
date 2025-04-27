@@ -18,7 +18,7 @@ public abstract class DataProcessor {
     DataProcessor(Context context) {
         _context = context;
         if(_db == null){
-            _db = Room.databaseBuilder(_context, AppDatabase.class, Constants.db_name).build();
+            _db = DataBase.get_db(context.getApplicationContext());
         }
     }
 

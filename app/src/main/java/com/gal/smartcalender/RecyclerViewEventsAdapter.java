@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,6 +30,9 @@ import java.util.Set;
 
 public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerViewEventsAdapter.ViewHolder> {
     private static ArrayList<Event> _localDataSet;
+
+    private static AppDatabase _appDatabase;
+
     private static ArraySet<Event> _checked_events = null;
 
     private static CheckBox _selectAllCheckBox = null;
@@ -127,17 +131,23 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    public RecyclerViewEventsAdapter(ArrayList<Event> dataSet, CheckBox selectAllCheckBox, FloatingActionButton deleteButton) {
-        _localDataSet = dataSet;
+    public RecyclerViewEventsAdapter(AppDatabase database, LifecycleOwner lifecycleOwner, CheckBox selectAllCheckBox, FloatingActionButton deleteButton) {
+        _appDatabase = database;
         _selectAllCheckBox = selectAllCheckBox;
         _deleteButton = deleteButton;
         _deleteButton.setVisibility(GONE);
+        _localDataSet = new ArrayList<Event>();
+        _appDatabase.EventsDao().getAllLive().observe(lifecycleOwner, events -> {
+            _localDataSet.clear();
+            _localDataSet.addAll(events);
+            notifyDataSetChanged();
+        });
     }
 
-    public void set_localDataSet(ArrayList<Event> dataSet){
-        _localDataSet = dataSet;
-        notifyDataSetChanged();
-    }
+//    public void set_localDataSet(ArrayList<Event> dataSet){
+//        _localDataSet = dataSet;
+//        notifyDataSetChanged();
+//    }
 
     @NonNull
     @Override

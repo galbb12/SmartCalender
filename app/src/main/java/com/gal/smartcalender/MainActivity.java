@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         calenderManager = new CalenderManager(this);
 
         // Initialize the database
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, Constants.db_name).build();
+        db = DataBase.get_db(getApplicationContext());
 
         // Initialize UI components
         recyclerView = findViewById(R.id.recyclerView);
@@ -104,23 +104,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        observeData();
-    }
-
-    void observeData() {
-        db.EventsDao().getAllLive().observe(this, events -> {
-            if (recyclerViewEventsAdapter == null) {
-                recyclerViewEventsAdapter = new RecyclerViewEventsAdapter((ArrayList<Event>) events, selectAllCheckbox, deleteButton);
-                recyclerView.setAdapter(recyclerViewEventsAdapter);
-            }
-            recyclerViewEventsAdapter.set_localDataSet(new ArrayList<>(events)); // Update data without resetting the adapter
-        });
+        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAllCheckbox, deleteButton);
+        recyclerView.setAdapter(recyclerViewEventsAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        observeData();
     }
 
     private boolean isNotificationServiceEnabled() {
