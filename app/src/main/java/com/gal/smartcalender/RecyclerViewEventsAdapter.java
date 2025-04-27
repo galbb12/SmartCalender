@@ -39,6 +39,8 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
 
     private static FloatingActionButton _deleteButton = null;
 
+    private static FloatingActionButton _addToCalenderBulkButton = null;
+
     private static CalenderManager calenderManager = null;
 
     public static String ZonedDateTimeToHumanReadableStr(ZonedDateTime zonedDateTime) {
@@ -118,8 +120,10 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
                     }
                     if(_checked_events.size() == 0){
                         _deleteButton.setVisibility(GONE);
+                        _addToCalenderBulkButton.setVisibility(GONE);
                     }else{
                         _deleteButton.setVisibility(VISIBLE);
+                        _addToCalenderBulkButton.setVisibility(VISIBLE);
                     }
                 }
             });
@@ -131,10 +135,12 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    public RecyclerViewEventsAdapter(AppDatabase database, LifecycleOwner lifecycleOwner, CheckBox selectAllCheckBox, FloatingActionButton deleteButton) {
+    public RecyclerViewEventsAdapter(AppDatabase database, LifecycleOwner lifecycleOwner, CheckBox selectAllCheckBox, FloatingActionButton deleteButton, FloatingActionButton addToCalenderBulkButton) {
         _appDatabase = database;
         _selectAllCheckBox = selectAllCheckBox;
         _deleteButton = deleteButton;
+        _addToCalenderBulkButton = addToCalenderBulkButton;
+        _addToCalenderBulkButton.setVisibility(GONE);
         _deleteButton.setVisibility(GONE);
         _localDataSet = new ArrayList<Event>();
         _appDatabase.EventsDao().getAllLive().observe(lifecycleOwner, events -> {
@@ -143,11 +149,6 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
             notifyDataSetChanged();
         });
     }
-
-//    public void set_localDataSet(ArrayList<Event> dataSet){
-//        _localDataSet = dataSet;
-//        notifyDataSetChanged();
-//    }
 
     @NonNull
     @Override

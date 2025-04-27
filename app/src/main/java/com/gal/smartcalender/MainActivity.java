@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAllCheckbox, deleteButton);
+        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAllCheckbox, deleteButton, addButton);
         recyclerView.setAdapter(recyclerViewEventsAdapter);
     }
 
