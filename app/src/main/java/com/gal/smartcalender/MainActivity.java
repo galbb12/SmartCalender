@@ -20,11 +20,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         calenderManager = new CalenderManager(this);
 
         // Initialize the database
-        db = DataBase.get_db(getApplicationContext());
+        db = DataBaseSingletone.get_db(getApplicationContext());
 
         // Initialize UI components
         recyclerView = findViewById(R.id.recyclerView);

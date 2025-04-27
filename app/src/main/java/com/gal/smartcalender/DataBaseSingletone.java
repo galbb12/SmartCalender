@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.room.Room;
 
-public class DataBase {
+public class DataBaseSingletone {
     static private AppDatabase _db = null;
 
     public static AppDatabase get_db(Context context){
