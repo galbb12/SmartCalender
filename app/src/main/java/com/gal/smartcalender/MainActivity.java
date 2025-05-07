@@ -25,7 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     RecyclerView recyclerView = null;
     AppDatabase db = null;
     RecyclerViewEventsAdapter recyclerViewEventsAdapter = null;
@@ -204,5 +204,10 @@ public class MainActivity extends AppCompatActivity {
                addButton.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    @Override
+    protected int getSelectedNavItemId() {
+        return R.id.nav_home;
     }
 }
