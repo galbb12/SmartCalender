@@ -28,6 +28,18 @@
 
     </PreferenceCategory>
 
+    <!-- Calender Settings -->
+    <PreferenceCategory app:title="Calender Settings">
+
+        <MultiSelectListPreference
+            app:key="selected_calenders"
+            app:title="Destination calenders"
+            app:dialogTitle="Select calenders"
+            app:defaultValue="@array/default_apps"
+            app:summary="Select which apps should be processed"/>
+
+    </PreferenceCategory>
+
     <Preference
         android:key="open_system_prompt_edit_activity"
         android:title="Open the edit system prompt"

@@ -30,7 +30,6 @@ public class MainActivity extends BaseActivity {
     AppDatabase db = null;
     RecyclerViewEventsAdapter recyclerViewEventsAdapter = null;
     Toolbar toolbar = null;
-    ImageButton moreButton = null;
     CheckBox selectAll = null;
     FloatingActionButton deleteButton = null;
     FloatingActionButton addButton = null;
@@ -63,12 +62,10 @@ public class MainActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         toolbar = findViewById(R.id.toolbar);
         selectAll = findViewById(R.id.select_all);
-        moreButton = findViewById(R.id.more_button);
-        selectAllCheckbox = findViewById(R.id.select_all);
-        setSupportActionBar(toolbar);
 
-        // Setup more button click listener
-        moreButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, com.gal.smartcalender.Settings.SettingsActivity.class)));
+        // Init action bar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false); // Disable the main toolbar title
 
         // Handle select all checkbox
         selectAll.setOnClickListener(v -> {

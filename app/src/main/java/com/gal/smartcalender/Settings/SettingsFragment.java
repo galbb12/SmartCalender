@@ -14,6 +14,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.gal.smartcalender.AboutActivity;
+import com.gal.smartcalender.CalenderManager;
 import com.gal.smartcalender.Constants;
 import com.gal.smartcalender.EditSystemPromptActivity;
 import com.gal.smartcalender.R;
@@ -76,6 +77,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             packageNames[i] = info.activityInfo.packageName;
         }
 
+        appListPref.setEntries(appNames);
+        appListPref.setEntryValues(packageNames);
+    }
+
+    // For populating settings in the apps installed
+    private void populateCalenders() {
+        MultiSelectListPreference appListPref = findPreference(Constants.SELECTED_APPS_PREFERENCE);
+        if (appListPref == null) return;
+
+        String[] calender_names;
+        String[] calender_ids;
+
+        CalenderManager calenderManager = new CalenderManager(this.getContext());
+
+        List<Pair<Long, String>> cal_list = calenderManager.getCalendarIdsAndNames();
+
+        for (int i = 0; i < cal_list.size(); i++) {
+
+        }
         appListPref.setEntries(appNames);
         appListPref.setEntryValues(packageNames);
     }

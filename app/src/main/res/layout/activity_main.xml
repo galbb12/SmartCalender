@@ -16,18 +16,6 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintTop_toTopOf="parent">
-        <ImageButton
-            android:id="@+id/more_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-
-            android:src="@drawable/baseline_more_horiz_24"
-            app:tint="@color/white"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="22dp"
-            android:layout_gravity="end"
-            android:background="@android:color/transparent"
-            android:layout_marginHorizontal="16dp"/>
 <!--        <ImageButton-->
 <!--            android:id="@+id/chart_button"-->
 <!--            android:layout_width="wrap_content"-->
@@ -47,10 +35,8 @@
             android:text="Select all"
             android:layout_gravity="end"
             android:textColor="@color/white"
-            android:buttonTint="@color/white" />
-
-
-
+            android:buttonTint="@color/white"
+            android:layout_marginHorizontal="16dp"/>
 
 
 

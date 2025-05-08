@@ -8,14 +8,18 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CalenderManager {
     private Context _ctx;
 
-    CalenderManager(Context ctx){
+    public CalenderManager(Context ctx){
         _ctx = ctx;
     }
     public void addToAllCalendars(Event event) {
@@ -54,5 +58,38 @@ public class CalenderManager {
             } while (cursor.moveToNext());
             cursor.close();
         }
+    }
+
+    public List<Pair<Long, String>> getCalendarIdsAndNames() {
+        List<Pair<Long, String>> calendars = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(_ctx, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(_ctx, "Calendar permission required", Toast.LENGTH_LONG).show();
+            return calendars;
+        }
+
+        String[] projection = new String[] {
+                CalendarContract.Calendars._ID,
+                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME
+        };
+
+        Cursor cursor = _ctx.getContentResolver().query(
+                CalendarContract.Calendars.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+
+        if (cursor != null) {
+            int idCol = cursor.getColumnIndex(CalendarContract.Calendars._ID);
+            int nameCol = cursor.getColumnIndex(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME);
+            while (cursor.moveToNext()) {
+                long id = cursor.getLong(idCol);
+                String name = cursor.getString(nameCol);
+                calendars.add(new Pair<>(id, name));
+            }
+            cursor.close();
+        }
+        return calendars;
     }
 }
