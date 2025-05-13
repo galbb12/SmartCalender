@@ -29,5 +29,7 @@ public interface Constants {
 
     public static final String SELECTED_APPS_PREFERENCE  = "selected_apps";
 
+    public static final String SELECTED_CALENDERS_PREFERENCE = "selected_calenders";
+
 
 }

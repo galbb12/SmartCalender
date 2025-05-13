@@ -30,6 +30,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.prefrences, rootKey);
         populateInstalledApps();
+        populateCalenders();
         Preference openAboutActivityPref = findPreference("open_about_activity");
         if (openAboutActivityPref != null) {
             openAboutActivityPref.setOnPreferenceClickListener(preference -> {
@@ -83,21 +84,23 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     // For populating settings in the apps installed
     private void populateCalenders() {
-        MultiSelectListPreference appListPref = findPreference(Constants.SELECTED_APPS_PREFERENCE);
+        MultiSelectListPreference appListPref = findPreference(Constants.SELECTED_CALENDERS_PREFERENCE);
         if (appListPref == null) return;
-
-        String[] calender_names;
-        String[] calender_ids;
 
         CalenderManager calenderManager = new CalenderManager(this.getContext());
 
         List<Pair<Long, String>> cal_list = calenderManager.getCalendarIdsAndNames();
 
-        for (int i = 0; i < cal_list.size(); i++) {
+        String[] calender_names = new String[cal_list.size()];
+        String[] calender_ids = new String[cal_list.size()];
 
+
+        for (int i = 0; i < cal_list.size(); i++) {
+            calender_names[i] = cal_list.get(i).second;
+            calender_ids[i] = Long.toString(cal_list.get(i).first);
         }
-        appListPref.setEntries(appNames);
-        appListPref.setEntryValues(packageNames);
+        appListPref.setEntries(calender_names);
+        appListPref.setEntryValues(calender_ids);
     }
 
 
