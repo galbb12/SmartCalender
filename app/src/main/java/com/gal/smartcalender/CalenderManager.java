@@ -1,26 +1,35 @@
 package com.gal.smartcalender;
 
+import static com.gal.smartcalender.Constants.SELECTED_CALENDERS_PREFERENCE;
+
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CalenderManager {
     private Context _ctx;
+    private SharedPreferences _sharedPreferences;
 
     public CalenderManager(Context ctx){
         _ctx = ctx;
+        this._sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
     }
     public void addToAllCalendars(Event event) {
         // Check for calendar permissions
@@ -59,6 +68,38 @@ public class CalenderManager {
             cursor.close();
         }
     }
+
+    public void addToSpecificCalendar(Event event, long calendarId) {
+        // Check for calendar permissions
+        if (ContextCompat.checkSelfPermission(_ctx, android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(_ctx, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(_ctx, "Calendar permissions are required to add events", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        ContentResolver cr = _ctx.getContentResolver();
+
+        // Insert event into the specified calendar
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.DTSTART, event.startDate.toInstant().toEpochMilli());
+        values.put(CalendarContract.Events.DTEND, event.endDate.toInstant().toEpochMilli());
+        values.put(CalendarContract.Events.TITLE, event.eventInfo);
+        values.put(CalendarContract.Events.DESCRIPTION, event.eventInfo);
+        values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, event.startDate.getZone().getId());
+
+        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+
+    }
+
+    public void addToSelectedCalenders(Event event){
+        Set<String> selectedCalenders = _sharedPreferences.getStringSet(SELECTED_CALENDERS_PREFERENCE, new HashSet<String>());
+        for (String calId: selectedCalenders) {
+            addToSpecificCalendar(event, Long.parseLong(calId));
+        }
+
+    }
+
 
     public List<Pair<Long, String>> getCalendarIdsAndNames() {
         List<Pair<Long, String>> calendars = new ArrayList<>();

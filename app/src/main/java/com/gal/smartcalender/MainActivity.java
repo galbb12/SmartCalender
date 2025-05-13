@@ -36,8 +36,6 @@ public class MainActivity extends BaseActivity {
 
     CalenderManager calenderManager = null;
 
-    CheckBox selectAllCheckbox = null;
-
     private static final int REQUEST_CALENDAR_PERMISSION = 100;
     private static final int REQUEST_NOTIFICATION_PERMISSION = 101;
 
@@ -92,14 +90,14 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 Executors.newSingleThreadExecutor().execute(() -> {
                     for (Event event : recyclerViewEventsAdapter.get_checked_events()) {
-                        calenderManager.addToAllCalendars(event);
+                        calenderManager.addToSelectedCalenders(event);
                         db.EventsDao().delete(event); // Delete selected events from the database
                     }
                 });
             }
         });
 
-        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAllCheckbox, deleteButton, addButton);
+        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAll, deleteButton, addButton);
         recyclerView.setAdapter(recyclerViewEventsAdapter);
     }
 
