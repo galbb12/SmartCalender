@@ -1,5 +1,8 @@
 package com.gal.smartcalender;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -11,6 +14,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -33,7 +37,7 @@ public class MainActivity extends BaseActivity {
     CheckBox selectAll = null;
     FloatingActionButton deleteButton = null;
     FloatingActionButton addButton = null;
-
+    TextView emptyInstructionTextView = null;
     CalenderManager calenderManager = null;
 
     private static final int REQUEST_CALENDAR_PERMISSION = 100;
@@ -60,6 +64,7 @@ public class MainActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         toolbar = findViewById(R.id.toolbar);
         selectAll = findViewById(R.id.select_all);
+        emptyInstructionTextView = findViewById(R.id.no_events_text_view);
 
         // Init action bar
         setSupportActionBar(toolbar);
@@ -96,6 +101,8 @@ public class MainActivity extends BaseActivity {
                 });
             }
         });
+
+        db.EventsDao().getAllLive().observe(this, events -> {if(events.isEmpty()) emptyInstructionTextView.setVisibility(VISIBLE); else emptyInstructionTextView.setVisibility(GONE);});
 
         recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAll, deleteButton, addButton);
         recyclerView.setAdapter(recyclerViewEventsAdapter);
@@ -192,11 +199,11 @@ public class MainActivity extends BaseActivity {
     private void toggleFloatingButtonsVisibility() {
         if(recyclerViewEventsAdapter.get_checked_events() != null){
             if (recyclerViewEventsAdapter.get_checked_events().size() == 0) {
-                deleteButton.setVisibility(View.GONE);
-                addButton.setVisibility(View.GONE);
+                deleteButton.setVisibility(GONE);
+                addButton.setVisibility(GONE);
             } else {
-                deleteButton.setVisibility(View.VISIBLE);
-               addButton.setVisibility(View.VISIBLE);
+                deleteButton.setVisibility(VISIBLE);
+               addButton.setVisibility(VISIBLE);
             }
         }
     }
