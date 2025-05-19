@@ -135,7 +135,7 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    public RecyclerViewEventsAdapter(AppDatabase database, LifecycleOwner lifecycleOwner, CheckBox selectAllCheckBox, FloatingActionButton deleteButton, FloatingActionButton addToCalenderBulkButton) {
+    public RecyclerViewEventsAdapter(AppDatabase database, LifecycleOwner lifecycleOwner, CheckBox selectAllCheckBox, FloatingActionButton deleteButton, FloatingActionButton addToCalenderBulkButton, TextView emptyInstructTextView ) {
         _appDatabase = database;
         _selectAllCheckBox = selectAllCheckBox;
         _deleteButton = deleteButton;
@@ -146,6 +146,7 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
         _appDatabase.EventsDao().getAllLive().observe(lifecycleOwner, events -> {
             _localDataSet.clear();
             _localDataSet.addAll(events);
+            if(events.isEmpty()) emptyInstructTextView.setVisibility(VISIBLE); else emptyInstructTextView.setVisibility(GONE);
             notifyDataSetChanged();
         });
     }

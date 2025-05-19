@@ -102,9 +102,8 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        db.EventsDao().getAllLive().observe(this, events -> {if(events.isEmpty()) emptyInstructionTextView.setVisibility(VISIBLE); else emptyInstructionTextView.setVisibility(GONE);});
 
-        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAll, deleteButton, addButton);
+        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAll, deleteButton, addButton, emptyInstructionTextView);
         recyclerView.setAdapter(recyclerViewEventsAdapter);
     }
 
