@@ -23,6 +23,9 @@ interface EventDao {
     @Delete
     public void delete(Event event);
 
+    @Delete
+    public void deleteBulk(List<Event> events);
+
     @Query("select * from Event")
     public LiveData<List<Event>> getAllLive();
 }

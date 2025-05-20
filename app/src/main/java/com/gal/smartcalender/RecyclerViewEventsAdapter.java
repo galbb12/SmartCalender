@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,9 +37,8 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
 
     private static CheckBox _selectAllCheckBox = null;
 
-    private static FloatingActionButton _deleteButton = null;
+    private static Toolbar _toolbar = null;
 
-    private static FloatingActionButton _addToCalenderBulkButton = null;
 
     private static CalenderManager calenderManager = null;
 
@@ -101,6 +100,13 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
             eventStartDate.setText(ZonedDateTimeToHumanReadableStr(event.startDate));
             eventEndDate.setText(ZonedDateTimeToHumanReadableStr(event.endDate));
             eventImportance.setText(String.valueOf(event.importance));
+            addToCalenderButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   calenderManager.addToSelectedCalenders(event);
+                    _appDatabase.EventsDao().delete(event);
+                }
+            });
             eventUrgency.setText(String.valueOf(event.urgency));
             if (_checked_events == null) {
                 _checked_events = new ArraySet<Event>();
@@ -118,12 +124,10 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
                     } else {
                         _selectAllCheckBox.setChecked(false);
                     }
-                    if(_checked_events.size() == 0){
-                        _deleteButton.setVisibility(GONE);
-                        _addToCalenderBulkButton.setVisibility(GONE);
-                    }else{
-                        _deleteButton.setVisibility(VISIBLE);
-                        _addToCalenderBulkButton.setVisibility(VISIBLE);
+                    if (_checked_events.isEmpty()){
+                        _toolbar.getMenu().clear();
+                    } else {
+                        _toolbar.inflateMenu(R.menu.batch_event_operation_menu);
                     }
                 }
             });
@@ -135,14 +139,11 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    public RecyclerViewEventsAdapter(AppDatabase database, LifecycleOwner lifecycleOwner, CheckBox selectAllCheckBox, FloatingActionButton deleteButton, FloatingActionButton addToCalenderBulkButton, TextView emptyInstructTextView ) {
+    public RecyclerViewEventsAdapter(AppDatabase database, LifecycleOwner lifecycleOwner, CheckBox selectAllCheckBox, TextView emptyInstructTextView, Toolbar toolbar) {
         _appDatabase = database;
         _selectAllCheckBox = selectAllCheckBox;
-        _deleteButton = deleteButton;
-        _addToCalenderBulkButton = addToCalenderBulkButton;
-        _addToCalenderBulkButton.setVisibility(GONE);
-        _deleteButton.setVisibility(GONE);
         _localDataSet = new ArrayList<Event>();
+        _toolbar = toolbar;
         _appDatabase.EventsDao().getAllLive().observe(lifecycleOwner, events -> {
             _localDataSet.clear();
             _localDataSet.addAll(events);

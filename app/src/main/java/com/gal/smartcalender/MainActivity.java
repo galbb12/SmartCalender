@@ -1,33 +1,25 @@
 package com.gal.smartcalender;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.concurrent.Executors;
 
 public class MainActivity extends BaseActivity {
     RecyclerView recyclerView = null;
@@ -35,8 +27,6 @@ public class MainActivity extends BaseActivity {
     RecyclerViewEventsAdapter recyclerViewEventsAdapter = null;
     Toolbar toolbar = null;
     CheckBox selectAll = null;
-    FloatingActionButton deleteButton = null;
-    FloatingActionButton addButton = null;
     TextView emptyInstructionTextView = null;
     CalenderManager calenderManager = null;
 
@@ -63,12 +53,40 @@ public class MainActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.action_delete){
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            db.EventsDao().deleteBulk(recyclerViewEventsAdapter.get_checked_events().stream().toList());
+                        }
+                    });
+                }
+                else if(item.getItemId() == R.id.action_add_calendar){
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            AsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    for(Event event : recyclerViewEventsAdapter.get_checked_events()){
+                                        calenderManager.addToSelectedCalenders(event);
+                                        db.EventsDao().delete(event);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+                return false;
+            }
+        });
+
         selectAll = findViewById(R.id.select_all);
         emptyInstructionTextView = findViewById(R.id.no_events_text_view);
 
-        // Init action bar
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false); // Disable the main toolbar title
 
         // Handle select all checkbox
         selectAll.setOnClickListener(v -> {
@@ -77,35 +95,15 @@ public class MainActivity extends BaseActivity {
             } else {
                 recyclerViewEventsAdapter.clearSelection();
             }
-            toggleFloatingButtonsVisibility();
-        });
-
-        // Setup floating buttons
-        deleteButton = findViewById(R.id.deleteButton);
-        deleteButton.setOnClickListener(v -> {
-            Executors.newSingleThreadExecutor().execute(() -> {
-                for (Event event : recyclerViewEventsAdapter.get_checked_events()) {
-                    db.EventsDao().delete(event); // Delete selected events from the database
-                }
-            });
-        });
-        addButton = findViewById(R.id.addToCalendarButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Executors.newSingleThreadExecutor().execute(() -> {
-                    for (Event event : recyclerViewEventsAdapter.get_checked_events()) {
-                        calenderManager.addToSelectedCalenders(event);
-                        db.EventsDao().delete(event); // Delete selected events from the database
-                    }
-                });
-            }
+            toggleBulkOp();
         });
 
 
-        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAll, deleteButton, addButton, emptyInstructionTextView);
+
+        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAll, emptyInstructionTextView, toolbar);
         recyclerView.setAdapter(recyclerViewEventsAdapter);
     }
+
 
     @Override
     public void onResume() {
@@ -195,15 +193,11 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void toggleFloatingButtonsVisibility() {
-        if(recyclerViewEventsAdapter.get_checked_events() != null){
-            if (recyclerViewEventsAdapter.get_checked_events().size() == 0) {
-                deleteButton.setVisibility(GONE);
-                addButton.setVisibility(GONE);
-            } else {
-                deleteButton.setVisibility(VISIBLE);
-               addButton.setVisibility(VISIBLE);
-            }
+    private void toggleBulkOp() {
+        if (recyclerViewEventsAdapter.get_checked_events().isEmpty()){
+            toolbar.getMenu().clear();
+        } else {
+            toolbar.inflateMenu(R.menu.batch_event_operation_menu);
         }
     }
 
