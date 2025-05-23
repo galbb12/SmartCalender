@@ -1,0 +1,3358 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ספר פרויקט - Smart Calendar</title>
+    <style>
+        /* CSS Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Heebo', Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #fafafa;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+        }
+
+        /* Header and Footer */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .page-footer {
+            background: #f8f9fa;
+            padding: 1rem;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+            margin-top: 2rem;
+        }
+
+        /* Title Page */
+        .title-page {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .title-page h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .title-page .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .title-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+
+        .title-info p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 2rem;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .toc h2 {
+            color: #495057;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toc a {
+            text-decoration: none;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            color: #667eea;
+        }
+
+        /* Headings */
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 2rem;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid #95a5a6;
+        }
+
+        h3 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        h4 {
+            color: #34495e;
+            font-size: 1.2rem;
+            margin: 0.8rem 0 0.4rem 0;
+        }
+
+        /* Paragraphs */
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* Lists */
+        ul,
+        ol {
+            margin: 1rem 0;
+            padding-right: 2rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Inline code */
+        code {
+            unicode-bidi: embed;
+            background: #f1f3f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            direction: ltr;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: right;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #e9ecef;
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: #e3f2fd;
+            border-right: 4px solid #2196f3;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-right: 4px solid #ff9800;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #e8f5e8;
+            border-right: 4px solid #4caf50;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        /* Image placeholder */
+        .image-placeholder {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            border-radius: 8px;
+            color: #6c757d;
+        }
+
+        /* Section dividers */
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            margin: 3rem 0;
+            border-radius: 2px;
+        }
+
+        /* Print styles */
+        @media print {
+            .container {
+                box-shadow: none;
+            }
+
+            .page-header {
+                position: static;
+            }
+
+            .code-block {
+                break-inside: avoid;
+            }
+
+            h1,
+            h2,
+            h3 {
+                break-after: avoid;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .title-page {
+                padding: 2rem 1rem;
+            }
+
+            .title-page h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <strong>Smart Calendar - יצירת אירועי לוח שנה אוטומטית מהתראות | גל ברקת</strong>
+        </div>
+
+        <!-- Title Page -->
+        <div class="title-page">
+            <img src="hugim-logo.jpg" width="150"></img>
+            
+            <h1>Smart Calendar</h1>
+            <div class="subtitle">יצירת אירועי לוח שנה אוטומטית מהתראות</div>
+
+            <div class="title-info">
+                <p><strong>שם בית הספר:</strong> תיכון חוגים</p>
+                <p><strong>שם התלמיד:</strong> גל ברקת</p>
+                <p><strong>ת.ז. התלמיד:</strong> 326144300</p>
+                <p><strong>שם המנחה:</strong> חגית כהן</p>
+                <p><strong>שם החלופה:</strong> הנדסת תוכנה - תכנות טלפונים חכמים (883589)</p>
+                <p><strong>תאריך ההגשה:</strong> 12.6.2025 </p>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h2>תוכן עניינים</h2>
+                <ul>
+                    <li><a href="#intro">1. מבוא</a></li>
+                    <li><a href="#architecture">2. מבנה/ארכיטקטורה של הפרויקט</a></li>
+                    <li><a href="#implementation">3. מימוש הפרויקט</a></li>
+                    <li><a href="#user-guide">4. מדריך למשתמש</a></li>
+                    <li><a href="#reflection">5. רפלקציה וסיכום אישי</a></li>
+                    <li><a href="#bibliography">6. ביבליוגרפיה</a></li>
+                    <li><a href="#appendix">7. נספחים</a></li>
+                </ul>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Chapter 1: Introduction -->
+            <section id="intro">
+                <h1>1. מבוא</h1>
+
+                <h2>1.1 הרקע לפרויקט</h2>
+
+                <h3>שם הפרויקט</h3>
+                <p>Smart Calendar - יצירת אירועי לוח שנה אוטומטית מהתראות</p>
+
+                <h3>תיאור קצר של הפרויקט</h3>
+                <p>בעידן הדיגיטלי, אנשים מקבלים אינספור התראות מדי יום ולעיתים קרובות מפספסים אירועים חשובים בשל חוסר תשומת לב להודעות. מטרת הפרויקט היא לפתח עוזר חכם המנתח את ההתראות המתקבלות בטלפון המשתמש, מזהה אירועים רלוונטיים, ומציע להוסיף אותם ליומן באופן אוטומטי.</p>
+
+                <h3>קהל היעד</h3>
+                <ul>
+                    <li>משתמשי Android העמוסים שמקבלים התראות רבות יומיות</li>
+                    <li>אנשי עסקים ומנהלים הזקוקים לניהול זמן יעיל</li>
+                    <li>משתמשים המעוניינים בפתרון אוטומטי לניהול לוח השנה</li>
+                    <li>אנשים בעלי לוח זמנים צפוף המתקשים לעקוב אחר כל הפגישות והמשימות</li>
+                </ul>
+
+                <h3>הסיבות לבחירת הנושא</h3>
+                <div class="info-box">
+                    <ol>
+                        <li><strong>בעיה יומיומית:</strong> רבים מאיתנו מקבלים עשרות התראות יומיות ומתקשים לזכור ולתרגם
+                            אותן לאירועי לוח שנה</li>
+                        <li><strong>חדשנות טכנולוגית:</strong> שימוש בבינה מלאכותית לעיבוד שפה טבעית ופענוח התראות</li>
+                        <li><strong>חיסכון בזמן:</strong> הפתרון מאפשר חיסכון משמעותי בזמן ושיפור ביעילות אישית</li>
+                        <li><strong>אינטגרציה חכמה:</strong> הפרויקט משלב טכנולוגיות מתקדמות של Android עם שירותי ענן
+                        </li>
+                    </ol>
+                </div>
+
+                <h2>1.2 מחקר על תחום הידע</h2>
+
+                <h3>בדיקת אפליקציות קיימות</h3>
+                <p>נבדקו מספר פתרונות קיימים בשוק:</p>
+                <ul>
+                    <li><strong>Google Calendar:</strong> מציע אינטגרציה עם Gmail אך לא עם אפליקציות אחרות</li>
+                    <li><strong>Microsoft Outlook:</strong> תמיכה מוגבלת באירועים מאפליקציות צד שלישי</li>
+                    <li><strong>Apple intelligence:</strong> תוכנה המאפשרת יכולות דומות, אך עדיין לא יצאה משלב ה-beta</li>
+                </ul>
+
+                <h3>סקירת המצב הקיים בשוק</h3>
+                <p>השוק חסר פתרון מקיף שמתאים לכל המשתמשים ומתמודד עם מגוון רחב של אפליקציות. הפתרונות הקיימים מוגבלים
+                    לאפליקציות ספציפיות או דורשים ידע טכני מתקדם.</p>
+
+                <h3>טכנולוגיות משמעותיות</h3>
+                <ul>
+                    <li><strong>OpenAI ChatGPT API:</strong> עיבוד שפה טבעית ופענוח התראות</li>
+                    <li><strong>Android Notification Listener Service:</strong> האזנה להתראות מערכת</li>
+                    <li><strong>Room Database:</strong> ניהול מסד נתונים מקומי</li>
+                    <li><strong>Android Calendar Provider:</strong> אינטגרציה עם לוחות השנה במכשיר</li>
+                </ul>
+
+                <h2>1.3 אתגרים מרכזיים</h2>
+
+                <h3>בעיות שהתמודדתי איתן</h3>
+                <div class="warning-box">
+                    <ol>
+                        <li><strong>ניתוח התראות מורכב:</strong> כל אפליקציה מייצרת התראות בפורמט שונה</li>
+                        <li><strong>הרשאות מערכת:</strong> דרישה להרשאות רגישות של גישה להתראות ולוח שנה</li>
+                        <li><strong>ביצועים ורשת:</strong> תלות בחיבור אינטרנט לעיבוד AI</li>
+                        <li><strong>דיוק וסינון:</strong> הבטחת יצירת אירועים רלוונטיים בלבד</li>
+                    </ol>
+                </div>
+
+                <h3>פתרונות שפותחו</h3>
+                <ul>
+                    <li>פיתוח מערכת פילטרים חכמה למניעת אירועים לא רלוונטיים</li>
+                    <li>יצירת תבנית הודעות מותאמת אישית ל-ChatGPT</li>
+                    <li>מימוש מנגנון Singleton לניהול מסד הנתונים</li>
+                    <li>פיתוח ממשק משתמש אינטואיטיבי לבחירת אפליקציות ולוחות שנה</li>
+                </ul>
+
+                <h2>1.4 תיאור תחום הידע</h2>
+
+                <h3>אובייקטים נחוצים</h3>
+                <ul>
+                    <li><strong>Event (אירוע):</strong> מכיל מידע מלא על אירוע - תיאור, תאריכי התחלה וסיום, דחיפות
+                        וחשיבות</li>
+                    <li><strong>Notification (התראה):</strong> מידע המתקבל מהתראות המערכת מאפליקציות שונות</li>
+                    <li><strong>Calendar (לוח שנה):</strong> לוחות השנה הזמינים במכשיר המשתמש</li>
+                    <li><strong>User Preferences (העדפות משתמש):</strong> הגדרות אישיות לאפליקציות נבחרות ולוחות שנה
+                        מועדפים</li>
+                    <li><strong>AI Response (תגובת AI):</strong> תוצאת עיבוד ההתראה על ידי מודל השפה</li>
+                </ul>
+
+                <h3>סוגי נתונים</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>סוג נתונים</th>
+                            <th>תיאור</th>
+                            <th>שימוש</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ZonedDateTime</td>
+                            <td>לייצוג מדויק של תאריכים ושעות עם אזור זמן</td>
+                            <td>תאריכי התחלה וסיום של אירועים</td>
+                        </tr>
+                        <tr>
+                            <td>String</td>
+                            <td>לתיאורי אירועים, שמות אפליקציות ומידע טקסטואלי</td>
+                            <td>תיאורי אירועים, מקורות נתונים</td>
+                        </tr>
+                        <tr>
+                            <td>Float</td>
+                            <td>לציוני דחיפות וחשיבות בטווח 0-1</td>
+                            <td>הערכת חשיבות ודחיפות אירועים</td>
+                        </tr>
+                        <tr>
+                            <td>Set</td>
+                            <td>לאוספי אפליקציות נבחרות ,לוחות שנה מועדפים ו- בחירת אובייקטים </td>
+                            <td>העדפות משתמש</td>
+                        </tr>
+                        <tr>
+                            <td>Event</td>
+                            <td>ייצוג אירוע במסד הנתונים </td>
+                            <td>העדפות משתמש</td>
+                        </tr>
+                        <tr>
+                            <td>JSON Objects</td>
+                            <td>להעברת מידע ל-API ומממנו</td>
+                            <td>תקשורת עם ChatGPT</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>ייצוג מידע</h3>
+                <div class="success-box">
+                    <p><strong>בחירת מסד נתונים:</strong> נבחר מסד נתונים מקומי Room עם TypeConverters להמרת סוגי נתונים
+                        מתקדמים.</p>
+                    <p><strong>סיבות לבחירה:</strong></p>
+                    <ul>
+                        <li><strong>ביצועים:</strong> גישה מהירה למידע ללא תלות ברשת</li>
+                        <li><strong>אמינות:</strong> שמירה מקומית מבטיחה זמינות תמידית</li>
+                        <li><strong>LiveData:</strong> עדכון אוטומטי של ממשק המשתמש</li>
+                        <li><strong>CRUD פשוט:</strong> פעולות בסיסיות ברורות ויעילות</li>
+                    </ul>
+                </div>
+
+                <h3>פעולות על המידע</h3>
+                <ul>
+                    <li><strong>הוספה:</strong> שמירת אירועים חדשים מעיבוד התראות</li>
+                    <li><strong>קריאה:</strong> הצגת רשימת אירועים ממתינים במסך הראשי</li>
+                    <li><strong>עדכון:</strong> שינוי מצב אירוע (נוסף ללוח שנה/נמחק)</li>
+                    <li><strong>מחיקה:</strong> הסרת אירועים לא רלוונטיים או שטופלו</li>
+                </ul>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Chapter 2: Architecture -->
+            <section id="architecture">
+                <h1>2. מבנה/ארכיטקטורה של הפרויקט</h1>
+
+                <h2>2.1 תיאור מסכי הפרויקט</h2>
+
+                <h3>מסך הפתיחה - MainActivity</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המסך:</strong> מסך ראשי המציג רשימת אירועים שזוהו מהתראות</p>
+                    <p><strong>תיאור המסך:</strong> מציג אירועים בצורת רשימה מתגלגלת עם פרטים מלאים על כל אירוע</p>
+                    <p><strong>אלמנטים עיקריים:</strong></p>
+                    <ul>
+                        <li>RecyclerView לרשימת אירועים</li>
+                        <li>Toolbar עם תפריט פעולות (מחיקה, הוספה ללוח שנה)</li>
+                        <li>CheckBox לבחירת הכל</li>
+                        <li>TextView להצגת הוראות כאשר אין אירועים</li>
+                    </ul>
+                </div>
+
+                <img src="main_activity_explained.svg" width="700">
+
+                <h3>מסך הגדרות - SettingsActivity</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המסך:</strong> ניהול הגדרות האפליקציה והתאמה אישית</p>
+                    <p><strong>תיאור המסך:</strong> מציג רשימת העדפות לבחירת אפליקציות, לוחות שנה ומודל AI</p>
+                    <p><strong>אלמנטים עיקריים:</strong></p>
+                    <ul>
+                        <li>MultiSelectListPreference לבחירת אפליקציות לעקיבה</li>
+                        <li>MultiSelectListPreference לבחירת לוחות שנה יעד</li>
+                        <li>ListPreference לבחירת מודל AI</li>
+                        <li>Preference לעריכת הודעת המערכת</li>
+                    </ul>
+                </div>
+
+                <img src="settings_activity_explained.svg" width="700">
+
+                <h3>מסך אודות - AboutActivity</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המסך:</strong> הצגת מידע על האפליקציה ומפתח</p>
+                    <p><strong>תיאור המסך:</strong> מסך מידע סטטי עם פרטי האפליקציה</p>
+                </div>
+
+                <img src="about_activity_explained.svg" width="700">
+
+                <h3>מסך עריכת הודעת מערכת - EditSystemPromptActivity</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המסך:</strong> עריכת ההוראות הנשלחות ל-ChatGPT</p>
+                    <p><strong>תיאור המסך:</strong> מציג EditText גדול לעריכת הטקסט עם כפתורי שמירה וביטול</p>
+                    <p><strong>אלמנטים עיקריים:</strong></p>
+                    <ul>
+                        <li>EditText רב-שורתי</li>
+                        <li>Button לשמירה</li>
+                        <li>Button לביטול</li>
+                    </ul>
+                </div>
+
+                <img src="edit_sys_prompt_activity_explained.svg" width="700">
+
+                <h2>2.2 תרשים מסכים</h2>
+
+                <div class="image-placeholder">
+                    [מקום לתרשים Screen Flow Diagram]
+                </div>
+
+                <div class="code-block">
+                    <pre>
+MainActivity (מסך ראשי)
+    ↓ ← → (ניווט תחתון)
+    ↓
+SettingsActivity (הגדרות)
+    ↓
+EditSystemPromptActivity (עריכת הודעת מערכת)
+    ↓ ← → (ניווט תחתון)
+    ↓
+AboutActivity (אודות)
+                    </pre>
+                </div>
+
+                <h2>2.3 תיאור מחלקות הפרויקט</h2>
+
+                <div class="image-placeholder">
+                    [מקום לתרשים UML של המחלקות]
+                </div>
+
+                <h3>חלוקה לקטגוריות</h3>
+
+                <h4>מחלקות UI (ממשק משתמש)</h4>
+                <ul>
+                    <li><strong>BaseActivity</strong> - מחלקת בסיס לכל הפעילויות</li>
+                    <li><strong>MainActivity, SettingsActivity, AboutActivity, EditSystemPromptActivity</strong></li>
+                </ul>
+
+                <h4>מחלקות נתונים (Data Layer)</h4>
+                <ul>
+                    <li><strong>Event</strong> - Entity עם כל פרטי האירוע</li>
+                    <li><strong>EventDao</strong> - Data Access Object למניפולציה של נתונים</li>
+                    <li><strong>AppDatabase</strong> - מסד הנתונים הראשי</li>
+                </ul>
+
+                <h4>מחלקות לוגיקה עסקית (Business Logic)</h4>
+                <ul>
+                    <li><strong>ChatGptApi</strong> - תקשורת עם OpenAI</li>
+                    <li><strong>ChatGptDataProcessor</strong> - עיבוד התראות</li>
+                    <li><strong>CalenderManager</strong> - ניהול לוחות שנה</li>
+                    <li><strong>NotificationService</strong> - שירות האזנה להתראות</li>
+                </ul>
+
+                <h4>מחלקות עזר (Utility Classes)</h4>
+                <ul>
+                    <li><strong>Constants</strong> - קבועים גלובליים</li>
+                    <li><strong>Converters</strong> - המרות לRoom Database</li>
+                    <li><strong>LLMUtils</strong> - כלים ל-LLM</li>
+                    <li><strong>DataBaseSingletone</strong> - דפוס Singleton למסד נתונים</li>
+                </ul>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Chapter 3: Implementation -->
+            <section id="implementation">
+                <h1>3. מימוש הפרויקט</h1>
+
+                <h2>3.1 מחלקות עיקריות</h2>
+
+                <h3>מחלקת AboutActivity</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> מסך "אודות" המציג מידע על האפליקציה</p>
+                    <p><strong>תכונות המחלקה:</strong> יורשת מ-BaseActivity ללא תכונות ייחודיות</p>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>onCreate(Bundle savedInstanceState)</code> - אתחול המסך</li>
+                        <li><code>getSelectedNavItemId()</code> - מחזיר את מזהה הפריט הנבחר בניווט</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_about);
+}
+
+@Override
+protected int getSelectedNavItemId() {
+    return R.id.nav_about;
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת AppDatabase</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> מסד נתונים ראשי של האפליקציה באמצעות Room</p>
+                    <p><strong>תכונות המחלקה:</strong> מחלקה מופשטת המכילה את כל ה-DAOs</p>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>EventsDao()</code> - מחזיר גישה ל-DAO של אירועים</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+@Database(entities = {Event.class}, version = 1)
+@TypeConverters(Converters.class)
+public abstract class AppDatabase extends RoomDatabase {
+    public abstract EventDao EventsDao();
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת BaseActivity</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> מחלקת בסיס לכל הפעילויות - מספקת תפריט ניווט תחתון משותף</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>protected BottomNavigationView bottomNav</code> - תפריט ניווט תחתון</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>setContentView(int layoutResID)</code> - הגדרת תוכן הפעילות עם תפריט ניווט</li>
+                        <li><code>setupBottomNavigation()</code> - הגדרת תפריט הניווט התחתון</li>
+                        <li><code>getSelectedNavItemId()</code> - פונקציה מופשטת להחזרת פריט נבחר</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+@Override
+public void setContentView(int layoutResID) {
+    // Inflate the base layout
+    LinearLayout baseLayout = (LinearLayout) getLayoutInflater()
+            .inflate(R.layout.activity_base, null);
+    // Find the content container
+    FrameLayout contentFrame = baseLayout.findViewById(R.id.base_content);
+    // Inflate the child layout into the container
+    getLayoutInflater().inflate(layoutResID, contentFrame, true);
+    // Set the composed layout as the activity content
+    super.setContentView(baseLayout);
+
+    setupBottomNavigation();
+}
+
+private void setupBottomNavigation() {
+    bottomNav = findViewById(R.id.base_bottom_nav);
+    bottomNav.setOnItemSelectedListener(item -> {
+        Class<?> targetActivity = null;
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.nav_home) {
+            targetActivity = MainActivity.class;
+        } else if (itemId == R.id.nav_settings) {
+            targetActivity = SettingsActivity.class;
+        } else if (itemId == R.id.nav_about) {
+            targetActivity = AboutActivity.class;
+        }
+
+        if (!this.getClass().equals(targetActivity)) {
+            Intent intent = new Intent(this, targetActivity);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+            return true;
+        }
+        return true;
+    });
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת CalenderManager</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> ניהול אינטגרציה עם לוחות השנה</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>private Context _ctx</code> - הקשר של האפליקציה</li>
+                        <li><code>private SharedPreferences _sharedPreferences</code> - העדפות משתמש</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>addToAllCalendars(Event event)</code> - הוספת אירוע לכל לוחות השנה</li>
+                        <li><code>addToSpecificCalendar(Event event, long calendarId)</code> - הוספה ללוח שנה ספציפי</li>
+                        <li><code>addToSelectedCalenders(Event event)</code> - הוספה ללוחות שנה נבחרים</li>
+                        <li><code>getCalendarIdsAndNames()</code> - קבלת רשימת לוחות שנה זמינים</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+public void addToSelectedCalenders(Event event){
+    Set&lt;String&gt; selectedCalenders = _sharedPreferences.getStringSet(SELECTED_CALENDERS_PREFERENCE, new HashSet&lt;String&gt;());
+    for (String calId: selectedCalenders) {
+        addToSpecificCalendar(event, Long.parseLong(calId));
+    }
+}
+
+public void addToSpecificCalendar(Event event, long calendarId) {
+    if (ContextCompat.checkSelfPermission(_ctx, android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(_ctx, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+        Toast.makeText(_ctx, "Calendar permissions are required to add events", Toast.LENGTH_LONG).show();
+        return;
+    }
+
+    ContentResolver cr = _ctx.getContentResolver();
+    ContentValues values = new ContentValues();
+    values.put(CalendarContract.Events.DTSTART, event.startDate.toInstant().toEpochMilli());
+    values.put(CalendarContract.Events.DTEND, event.endDate.toInstant().toEpochMilli());
+    values.put(CalendarContract.Events.TITLE, event.eventInfo);
+    values.put(CalendarContract.Events.DESCRIPTION, event.eventInfo);
+    values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
+    values.put(CalendarContract.Events.EVENT_TIMEZONE, event.startDate.getZone().getId());
+
+    Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת ChatGptApi</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> ניהול תקשורת עם OpenAI API</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>private String _api_key</code> - מפתח API</li>
+                        <li><code>private String _model</code> - מודל AI נבחר</li>
+                        <li><code>private static final String API_URL</code> - כתובת API</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>ChatGptApi(String api_key)</code> - קונסטרקטור</li>
+                        <li><code>setModel(String model)</code> - הגדרת מודל AI</li>
+                        <li><code>sendQuery(Object[] messages, Callback callback)</code> - שליחת בקשה ל-ChatGPT</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+public void sendQuery(Object[] messages, Callback callback) {
+    OkHttpClient client = new OkHttpClient();
+
+    Map&lt;String, Object&gt; requestBody = new HashMap&lt;&gt;();
+    requestBody.put("model", _model);
+    requestBody.put("messages", messages);
+
+    Gson gson = new Gson();
+    String json = gson.toJson(requestBody);
+
+    Request request = new Request.Builder()
+            .url(API_URL)
+            .addHeader("Authorization", "Bearer " + _api_key)
+            .addHeader("Content-Type", "application/json")
+            .post(RequestBody.create(json, MediaType.get("application/json; charset=utf-8")))
+            .build();
+
+    client.newCall(request).enqueue(callback);
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת ChatGptDataProcessor</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> עיבוד התראות דרך ChatGPT</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>private ChatGptApi _chatGptApi</code> - מופע API של ChatGPT</li>
+                        <li><code>SharedPreferences _sharedPreferences</code> - העדפות משתמש</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>processNotification(StatusBarNotification sbn)</code> - עיבוד התראה</li>
+                        <li><code>decodeGptResponse(Response response, String app_name)</code> - פענוח תגובת ChatGPT</li>
+                    </ul>
+                    <p><strong>אלגוריתם עיקרי:</strong></p>
+                    <ol>
+                        <li>בדיקת אפליקציות נבחרות ומודל AI</li>
+                        <li>המרת ההתראה לפורמט JSON</li>
+                        <li>שליחה ל-ChatGPT עם הודעת מערכת</li>
+                        <li>פענוח התגובה ויצירת אובייקט Event</li>
+                        <li>שמירה במסד הנתונים</li>
+                    </ol>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+@Override
+public void processNotification(StatusBarNotification sbn) {
+    Set&lt;String&gt; selectedApps = _sharedPreferences.getStringSet("selected_apps", new HashSet&lt;String&gt;());
+    String aiModel = _sharedPreferences.getString("ai_model", "none");
+    
+    if (aiModel.equals("none")) {
+        Log.d("Model is none", "returning");
+        return;
+    }
+    
+    _chatGptApi.setModel(aiModel);
+    
+    if (!selectedApps.contains(sbn.getPackageName())) {
+        Log.d("Skipped app:", sbn.getPackageName());
+        return;
+    }
+    
+    // Create JSON object from notification
+    Gson gson = new Gson();
+    Map&lt;String, Object&gt; noti_obj = new HashMap&lt;&gt;();
+    
+    // Get human readable app name
+    String packageName = sbn.getPackageName();
+    String appName = packageName.toString();
+    PackageManager packageManager = _context.getPackageManager();
+    try {
+        ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
+        appName = (String) packageManager.getApplicationLabel(applicationInfo);
+    } catch (Exception e){
+        // Keep package name if can't get app name
+    }
+
+    noti_obj.put("package name", packageName);
+    
+    // Extract all notification data
+    for (String key : sbn.getNotification().extras.keySet()) {
+        Object value = sbn.getNotification().extras.get(key);
+        if (value != null) {
+            noti_obj.put(key, value.toString());
+        }
+    }
+
+    String jsonObj = gson.toJson(noti_obj);
+
+    // Prepare messages for ChatGPT
+    Object[] messages = new Object[]{
+            new HashMap&lt;String, String&gt;() {{
+                put("role", "system");
+                put("content", LLMUtils.generate_system_message(_context));
+            }},
+            new HashMap&lt;String, String&gt;() {{
+                put("role", "user");
+                put("content", jsonObj);
+            }}
+    };
+
+    final String finalAppName = appName;
+    this._chatGptApi.sendQuery(messages, new Callback() {
+        @Override
+        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            Log.e("ChatGPT", "API call failed", e);
+        }
+
+        @Override
+        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+            decodeGptResponse(response, finalAppName);
+        }
+    });
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת Constants</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> ממשק המכיל קבועים גלובליים לאפליקציה</p>
+                    <p><strong>קבועים עיקריים:</strong></p>
+                    <ul>
+                        <li><code>DEFAULT_SYS_PROMPT</code> - הודעת מערכת ברירת מחדל ל-LLM</li>
+                        <li><code>db_name</code> - שם מסד הנתונים</li>
+                        <li><code>no_event_ret</code> - מחרוזת החזרה כאשר אין אירוע</li>
+                        <li><code>SELECTED_APPS_PREFERENCE</code> - מפתח העדפות אפליקציות</li>
+                        <li><code>SELECTED_CALENDERS_PREFERENCE</code> - מפתח העדפות לוחות שנה</li>
+                    </ul>
+                </div>
+
+                <h3>מחלקת Converters</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> המרת סוגי נתונים עבור Room Database</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>private static final DateTimeFormatter formatterLocalDateTime</code> - פורמט תאריכים</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>fromLocalDateTime/toLocalDateTime</code> - המרת LocalDateTime</li>
+                        <li><code>fromOffsetDateTime/toOffsetDateTime</code> - המרת OffsetDateTime</li>
+                        <li><code>fromZonedDateTime/toZoneDateTime</code> - המרת ZonedDateTime</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+@TypeConverter
+public static String fromZonedDateTime(ZonedDateTime dateTime) {
+    return dateTime != null ? dateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) : null;
+}
+
+@TypeConverter
+public static ZonedDateTime toZoneDateTime(String dateTimeString) {
+    return dateTimeString != null ? ZonedDateTime.parse(dateTimeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME) : null;
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת DataBaseSingletone</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> יישום דפוס Singleton למסד הנתונים</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>static private AppDatabase _db</code> - מופע יחיד של מסד הנתונים</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>get_db(Context context)</code> - קבלת מופע יחיד של מסד הנתונים</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+public static AppDatabase get_db(Context context){
+    if(_db == null){
+        _db= Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, Constants.db_name).build();
+    }
+    return _db;
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת DataProcessor (מופשטת)</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> מחלקת בסיס מופשטת לעיבוד נתונים מהתראות</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>protected Context _context</code> - הקשר של האפליקציה</li>
+                        <li><code>static protected AppDatabase _db</code> - מסד נתונים משותף</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>DataProcessor(Context context)</code> - קונסטרקטור</li>
+                        <li><code>processNotification(StatusBarNotification sbn)</code> - פונקציה מופשטת לעיבוד</li>
+                    </ul>
+                </div>
+
+                <h3>מחלקת EditSystemPromptActivity</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> מסך עריכת הודעת המערכת ל-LLM</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>EditText editText</code> - שדה עריכת הטקסט</li>
+                        <li><code>Button save_btn</code> - כפתור שמירה</li>
+                        <li><code>Button cancel_btn</code> - כפתור ביטול</li>
+                        <li><code>static final String PREF_EMPTY</code> - קבוע לערך ריק</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>onCreate(Bundle savedInstanceState)</code> - אתחול המסך</li>
+                        <li>מאזיני לחיצה לכפתורי שמירה וביטול</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_edit_system_prompt);
+    editText = findViewById(R.id.promptEditText);
+    editText.setText(LLMUtils.get_sys_message_template(getApplicationContext()));
+    
+    save_btn = findViewById(R.id.saveButton);
+    save_btn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences(APP_PREF_NAME, MODE_PRIVATE);
+            prefs.edit().putString(SYS_PROMPT_TXT_PREFERENCE_NAME, editText.getText().toString()).apply();
+            finish();
+        }
+    });
+    
+    cancel_btn = findViewById(R.id.cancelButton);
+    cancel_btn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            finish();
+        }
+    });
+}
+                    </pre>
+                </div>
+
+                <h3>ממשק EventDao + מחלקת Event</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד הממשק:</strong> ממשק גישה לנתונים (DAO) לאירועים במסד הנתונים</p>
+                    <p><strong>תפקיד המחלקה:</strong> ייצוג אירוע במסד הנתונים</p>
+                    <p><strong>תכונות Event:</strong></p>
+                    <ul>
+                        <li><code>public int eventId</code> - מזהה ייחודי</li>
+                        <li><code>public String dataSource</code> - מקור הנתונים</li>
+                        <li><code>public String data</code> - נתונים גולמיים</li>
+                        <li><code>public String eventInfo</code> - מידע האירוע</li>
+                        <li><code>public ZonedDateTime startDate/endDate</code> - תאריכי התחלה וסיום</li>
+                        <li><code>public float urgency/importance</code> - ציוני דחיפות וחשיבות</li>
+                    </ul>
+                    <p><strong>פעולות EventDao:</strong></p>
+                    <ul>
+                        <li><code>getAll()</code> - קבלת כל האירועים</li>
+                        <li><code>insertAll(Event... events)</code> - הוספת אירועים</li>
+                        <li><code>delete(Event event)</code> - מחיקת אירוע</li>
+                        <li><code>deleteBulk(List&lt;Event&gt; events)</code> - מחיקת אירועים מרובים</li>
+                        <li><code>getAllLive()</code> - קבלת אירועים כ-LiveData</li>
+                    </ul>
+                </div>
+
+                <h3>מחלקת LLMUtils</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> כלים עזר לעבודה עם מודלי שפה גדולים (LLM)</p>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>get_curr_time_zone()</code> - קבלת אזור הזמן הנוכחי</li>
+                        <li><code>get_sys_message_template(Context context)</code> - קבלת תבנית הודעת המערכת</li>
+                        <li><code>generate_system_message(Context context)</code> - יצירת הודעת מערכת מלאה</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+static protected String generate_system_message(Context context) {
+    ZonedDateTime zonedDateTimeUTC = ZonedDateTime.now(ZoneOffset.UTC);
+    ZonedDateTime zonedDateTimeCURR = ZonedDateTime.now();
+    String iso8601LOCAL = zonedDateTimeCURR.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+    String iso8601UTC = zonedDateTimeUTC.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+    
+    return get_sys_message_template(context)
+            .replace("&lt;CURR_DATE_TIME_UTC&gt;", iso8601UTC)
+            .replace("&lt;CURR_TIME_ZONE&gt;", get_curr_time_zone())
+            .replace("&lt;CURR_DATE_TIME&gt;", iso8601LOCAL);
+}
+
+static private String get_curr_time_zone() {
+    ZoneId zoneId = ZoneId.systemDefault();
+    ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
+    int offsetHours = zonedDateTime.getOffset().getTotalSeconds() / 3600;
+    return offsetHours >= 0 ? "UTC+" + offsetHours : "UTC" + offsetHours;
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת MainActivity</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> מסך ראשי המציג רשימת אירועים ומאפשר ניהולם</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>RecyclerView recyclerView</code> - רשימת אירועים</li>
+                        <li><code>AppDatabase db</code> - מסד נתונים</li>
+                        <li><code>RecyclerViewEventsAdapter recyclerViewEventsAdapter</code> - מתאם הרשימה</li>
+                        <li><code>Toolbar toolbar</code> - סרגל כלים</li>
+                        <li><code>CheckBox selectAll</code> - בחירת הכל</li>
+                        <li><code>CalenderManager calenderManager</code> - מנהל לוח השנה</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>onCreate(Bundle savedInstanceState)</code> - אתחול המסך</li>
+                        <li><code>isNotificationServiceEnabled()</code> - בדיקת הרשאות התראות</li>
+                        <li><code>requestCalendarPermissions()</code> - בקשת הרשאות לוח שנה</li>
+                        <li><code>toggleBulkOp()</code> - החלפת מצב פעולות מרובות</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+private boolean isNotificationServiceEnabled() {
+    String pkgName = getPackageName();
+    final String flat = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
+    if (flat != null && !flat.isEmpty()) {
+        final String[] names = flat.split(":");
+        for (String name : names) {
+            final ComponentName cn = ComponentName.unflattenFromString(name);
+            if (cn != null && TextUtils.equals(pkgName, cn.getPackageName())) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+private void toggleBulkOp() {
+    if (recyclerViewEventsAdapter.get_checked_events().isEmpty()){
+        toolbar.getMenu().clear();
+    } else {
+        if(!toolbar.getMenu().hasVisibleItems()){
+            toolbar.inflateMenu(R.menu.batch_event_operation_menu);
+        }
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת NotificationService</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> שירות האזנה להתראות מערכת ועיבודן</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>private static final String TAG</code> - תגית לוגים</li>
+                        <li><code>private DataProcessor _dataProcessor</code> - מעבד נתונים</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>onNotificationPosted(StatusBarNotification sbn)</code> - טיפול בהתראה חדשה</li>
+                        <li><code>onNotificationRemoved(StatusBarNotification sbn)</code> - טיפול בהסרת התראה</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+@Override
+public void onNotificationPosted(StatusBarNotification sbn) {
+    // Ignore group summary notifications
+    if ((sbn.getNotification().flags & FLAG_GROUP_SUMMARY) != 0) {
+        return;
+    }
+
+    if (_dataProcessor == null) {
+        _dataProcessor = new ChatGptDataProcessor(getApplicationContext());
+    }
+    _dataProcessor.processNotification(sbn);
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת RecyclerViewEventsAdapter</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> מתאם לתצוגת רשימת אירועים ב-RecyclerView</p>
+                    <p><strong>תכונות המחלקה:</strong></p>
+                    <ul>
+                        <li><code>private static ArrayList&lt;Event&gt; _localDataSet</code> - נתוני הרשימה</li>
+                        <li><code>private static AppDatabase _appDatabase</code> - מסד נתונים</li>
+                        <li><code>private static ArraySet&lt;Event&gt; _checked_events</code> - אירועים מסומנים</li>
+                        <li><code>private static CheckBox _selectAllCheckBox</code> - תיבת בחירת הכל</li>
+                        <li><code>private static Toolbar _toolbar</code> - סרגל כלים</li>
+                    </ul>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>ZonedDateTimeToHumanReadableStr(ZonedDateTime)</code> - המרת תאריך לטקסט קריא</li>
+                        <li><code>get_checked_events()</code> - קבלת אירועים מסומנים</li>
+                        <li><code>clearSelection()/selectAll()</code> - ניהול בחירה</li>
+                        <li><code>onCreateViewHolder/onBindViewHolder</code> - ניהול ViewHolder</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+public static String ZonedDateTimeToHumanReadableStr(ZonedDateTime zonedDateTime) {
+    ZonedDateTime systemZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
+    return systemZonedDateTime.format(formatter);
+}
+
+public void bind(Event event) {
+    eventDescriptionView.setText(event.eventInfo);
+    eventStartDate.setText(ZonedDateTimeToHumanReadableStr(event.startDate));
+    eventEndDate.setText(ZonedDateTimeToHumanReadableStr(event.endDate));
+    eventImportance.setText(String.valueOf(event.importance));
+    eventUrgency.setText(String.valueOf(event.urgency));
+    appName.setText(event.dataSource);
+    
+    // Setup add to calendar button
+    addToCalenderButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+           calenderManager.addToSelectedCalenders(event);
+            _appDatabase.EventsDao().delete(event);
+        }
+    });
+    
+    // Setup checkbox for selection management
+    checkBox.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(((CheckBox)v).isChecked()) {
+                _checked_events.add(event);
+            }else{
+                _checked_events.remove(event);
+            }
+            // Update UI based on selection state
+            updateSelectionUI();
+        }
+    });
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת SettingsActivity</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> מסך הגדרות שמארח את ה-SettingsFragment</p>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>onCreate(Bundle savedInstanceState)</code> - אתחול המסך והטעינת הפרגמנט</li>
+                        <li><code>getSelectedNavItemId()</code> - החזרת מזהה ניווט</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.settings_layout);
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, new SettingsFragment())
+            .commit();
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת SettingsFragment</h3>
+                <div class="info-box">
+                    <p><strong>תפקיד המחלקה:</strong> פרגמנט ההגדרות המנהל את אפשרויות התצורה</p>
+                    <p><strong>פעולות עיקריות:</strong></p>
+                    <ul>
+                        <li><code>onCreatePreferences(Bundle, String)</code> - יצירת העדפות מקובץ XML</li>
+                        <li><code>populateInstalledApps()</code> - מילוי רשימת אפליקציות מותקנות</li>
+                        <li><code>populateCalenders()</code> - מילוי רשימת לוחות שנה</li>
+                        <li>הגדרת מאזינים לפתיחת מסכים נוספים</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+private void populateInstalledApps() {
+    MultiSelectListPreference appListPref = findPreference(Constants.SELECTED_APPS_PREFERENCE);
+    if (appListPref == null) return;
+
+    PackageManager pm = requireContext().getPackageManager();
+    Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+    List&lt;ResolveInfo&gt; pkgAppsList = pm.queryIntentActivities(mainIntent, 0);
+
+    // Create a list of app data objects for efficient sorting
+    List&lt;AppData&gt; appDataList = new ArrayList&lt;&gt;(pkgAppsList.size());
+
+    for (ResolveInfo info : pkgAppsList) {
+        String label = pm.getApplicationLabel(info.activityInfo.applicationInfo).toString();
+        appDataList.add(new AppData(label, info.activityInfo.packageName));
+    }
+
+    // Sort by app name
+    appDataList.sort((a1, a2) -&gt; a1.name.compareToIgnoreCase(a2.name));
+
+    // Convert to arrays for preference
+    int size = appDataList.size();
+    String[] appNames = new String[size];
+    String[] packageNames = new String[size];
+
+    for (int i = 0; i &lt; size; i++) {
+        AppData data = appDataList.get(i);
+        appNames[i] = data.name;
+        packageNames[i] = data.packageName;
+    }
+
+    appListPref.setEntries(appNames);
+    appListPref.setEntryValues(packageNames);
+}
+
+// Helper class for efficient app data sorting
+private static class AppData {
+    final String name;
+    final String packageName;
+
+    AppData(String name, String packageName) {
+        this.name = name;
+        this.packageName = packageName;
+    }
+}
+                    </pre>
+                </div>
+
+                <h2>3.2 בסיס הנתונים</h2>
+
+                <h3>מבנה מסד הנתונים</h3>
+                <div class="success-box">
+                    <ul>
+                        <li><strong>טכנולוגיה:</strong> Room Database (SQLite)</li>
+                        <li><strong>Entity יחיד:</strong> Event</li>
+                        <li><strong>TypeConverters:</strong> המרת ZonedDateTime למחרוזת ולהפך</li>
+                    </ul>
+                </div>
+
+                <h3>טבלת Event</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>שדה</th>
+                            <th>סוג</th>
+                            <th>תיאור</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>eventId</td>
+                            <td>INTEGER PRIMARY KEY</td>
+                            <td>מזהה ייחודי</td>
+                        </tr>
+                        <tr>
+                            <td>DataSource</td>
+                            <td>TEXT</td>
+                            <td>מקור ההתראה</td>
+                        </tr>
+                        <tr>
+                            <td>Data</td>
+                            <td>TEXT</td>
+                            <td>נתונים גולמיים</td>
+                        </tr>
+                        <tr>
+                            <td>EventDescription</td>
+                            <td>TEXT</td>
+                            <td>תיאור האירוע</td>
+                        </tr>
+                        <tr>
+                            <td>StartDate</td>
+                            <td>TEXT</td>
+                            <td>תאריך התחלה (ISO format)</td>
+                        </tr>
+                        <tr>
+                            <td>EndDate</td>
+                            <td>TEXT</td>
+                            <td>תאריך סיום (ISO format)</td>
+                        </tr>
+                        <tr>
+                            <td>Urgency</td>
+                            <td>REAL</td>
+                            <td>ציון דחיפות</td>
+                        </tr>
+                        <tr>
+                            <td>Importance</td>
+                            <td>REAL</td>
+                            <td>ציון חשיבות</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>פעולות על בסיס הנתונים</h3>
+                <div class="code-block">
+                    <pre>
+@Dao
+interface EventDao {
+    @Query("SELECT * FROM Event")
+    List&lt;Event&gt; getAll();
+    
+    @Insert
+    void insertAll(Event... events);
+    
+    @Delete
+    void delete(Event event);
+    
+    @Query("select * from Event")
+    LiveData&lt;List&lt;Event&gt;&gt; getAllLive();
+}
+                    </pre>
+                </div>
+
+                <h2>3.3 תרשימי זרימה</h2>
+
+                <div class="image-placeholder">
+                    [מקום לתרשים זרימה של עיבוד התראה]
+                </div>
+
+                <h3>תהליך עיבוד התראה</h3>
+                <div class="info-box">
+                    <ol>
+                        <li>התראה חדשה מתקבלת</li>
+                        <li>בדיקה האם האפליקציה נבחרה לעקיבה</li>
+                        <li>המרת ההתראה ל-JSON</li>
+                        <li>שליחה ל-ChatGPT עם הודעת מערכת</li>
+                        <li>קבלת תגובה ופענוח JSON</li>
+                        <li>יצירת אובייקט Event</li>
+                        <li>שמירה במסד הנתונים</li>
+                        <li>עדכון ממשק המשתמש</li>
+                    </ol>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Chapter 4: User Guide -->
+            <section id="user-guide">
+                <h1>4. מדריך למשתמש</h1>
+
+                <h2>4.1 דרישות מערכת</h2>
+
+                <h3>דרישות חומרה מינימליות</h3>
+                <ul>
+                    <li>מכשיר Android עם API 21 (Android 5.0) ומעלה</li>
+                    <li>2GB זיכרון RAM</li>
+                    <li>100MB שטח אחסון פנוי</li>
+                    <li>חיבור אינטרנט יציב</li>
+                </ul>
+
+                <h3>גרסאות שנבדקו</h3>
+                <div class="success-box">
+                    <ul>
+                        <li>Android 13 (API 33)</li>
+                        <li>Android 12 (API 31)</li>
+                        <li>Android 10 (API 29)</li>
+                    </ul>
+                </div>
+
+                <h3>אמולטורים נתמכים</h3>
+                <ul>
+                    <li>Android Studio AVD Manager</li>
+                    <li>Pixel 4, 5, 6 emulators</li>
+                </ul>
+
+                <h2>4.2 הוראות התקנה</h2>
+
+                <h3>שלב 1: התקנת האפליקציה</h3>
+                <ol>
+                    <li>הורדת קובץ APK</li>
+                    <li>הפעלת "מקורות לא ידועים" בהגדרות המכשיר</li>
+                    <li>התקנת האפליקציה</li>
+                </ol>
+
+                <h3>שלב 2: הרשאות נדרשות</h3>
+                <div class="warning-box">
+                    <p><strong>הרשאות לוח שנה:</strong> האפליקציה תבקש גישה לקריאה וכתיבה ללוח השנה</p>
+                    <p><strong>הרשאת התראות:</strong> האפליקציה תוביל למסך בו ניתן לשאפשר את ההגדרה ושם יש ללחוץ על שם האפליקציה ולאשרה</p>
+                </div>
+
+                <h3>שלב 3: הגדרה ראשונית</h3>
+                <ol>
+                    <li>פתיחת האפליקציה לראשונה</li>
+                    <li>מעבר למסך הגדרות</li>
+                    <li>בחירת אפליקציות לעקיבה</li>
+                    <li>בחירת לוחות שנה יעד</li>
+                    <li>הגדרת מודל AI (ברירת מחדל: gpt-3.5-turbo)</li>
+                </ol>
+
+                <h2>4.3 אופן השימוש</h2>
+
+                <h3>שימוש בסיסי</h3>
+                <div class="info-box">
+                    <ol>
+                        <li><strong>המתנה לאירועים:</strong> לאחר ההגדרה, האפליקציה תזהה אירועים אוטומטית מהתראות</li>
+                        <li><strong>צפייה באירועים:</strong> במסך הראשי יוצגו אירועים שזוהו עם כל הפרטים</li>
+                        <li><strong>הוספה ללוח שנה:</strong> לחיצה על כפתור "הוסף ללוח שנה" תוסיף את האירוע ותמחק אותו
+                            מהרשימה</li>
+                        <li><strong>מחיקת אירועים:</strong> בחירת אירועים ולחיצה על כפתור המחיקה</li>
+                    </ol>
+                </div>
+
+                <h3>פעולות מתקדמות</h3>
+                <ul>
+                    <li><strong>בחירה מרובה:</strong> סימון מספר אירועים והפעלת פעולות גורפות</li>
+                    <li><strong>עריכת הודעת מערכת:</strong> התאמת ההוראות ל-AI לפי הצרכים האישיים</li>
+                    <li><strong>ניהול אפליקציות:</strong> הוספה או הסרה של אפליקציות מהרשימת העקיבה</li>
+                </ul>
+
+                <h3>הודעות למשתמש</h3>
+                <ul>
+                    <li>הודעות שגיאה במקרה של חוסר הרשאות</li>
+                    <li>הודעות אישור לאחר הוספה ללוח שנה</li>
+                    <li>הודעות מידע כאשר אין אירועים להצגה</li>
+                </ul>
+
+                <h3>מגבלות ואילוצים</h3>
+                <div class="warning-box">
+                    <ul>
+                        <li>תיאור אירוע מוגבל ל-500 תווים</li>
+                        <li>תלות בחיבור אינטרנט לעיבוד חדש</li>
+                        <li>מוגבל לאפליקציות שנבחרו בהגדרות בלבד</li>
+                        <li>דורש מפתח OpenAI API פעיל</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Chapter 5: Reflection -->
+            <section id="reflection">
+                <h1>5. רפלקציה וסיכום אישי</h1>
+
+                <p>פרויקט ה-Smart Calendar היה אתגר מרתק שלימד אותי על שילוב טכנולוגיות מתקדמות ופתרון בעיות מורכבות.
+                    התמודדתי עם אתגרים טכניים כמו ניהול הרשאות רגישות, אינטגרציה עם API חיצוני ועיבוד נתונים בזמן אמת.
+                </p>
+
+                <p>השלב המאתגר ביותר היה יצירת מערכת חכמה לסינון התראות ומניעת יצירת אירועים לא רלוונטיים. פיתחתי תבנית
+                    הודעות מותאמת שמנחה את ה-AI ליצור רק אירועים משמעותיים.</p>
+
+                <div class="success-box">
+                    <p><strong>הישגים עיקריים:</strong></p>
+                    <ul>
+                        <li>פיתוח אפליקציה פונקציונלית המשלבת AI מתקדם</li>
+                        <li>יצירת ממשק משתמש אינטואיטיבי וידידותי</li>
+                        <li>מימוש ארכיטקטורה מודולרית וניתנת לתחזוקה</li>
+                        <li>פתרון בעיות ביצועים ואמינות</li>
+                    </ul>
+                </div>
+
+                <p>הפרויקט חיזק את הידע שלי ב-Android Development, Room Database, עבודה עם APIs ובינה מלאכותית. בנוסף,
+                    למדתי על חשיבות UX/UI design ויצירת ממשק אינטואיטיבי למשתמש הסופי.</p>
+
+                <p>אני גאה בתוצאה הסופית - אפליקציה פונקציונלית שפותרת בעיה אמיתית ומציעה ערך מוסף למשתמשים. הפרויקט
+                    הוכיח שאפשר לשלב בהצלחה טכנולוגיות מתקדמות ליצירת פתרון יומיומי ומעשי.</p>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Chapter 6: Bibliography -->
+            <section id="bibliography">
+                <h1>6. ביבליוגרפיה</h1>
+
+                <ol>
+                    <li>Android Developers. (2023). <em>NotificationListenerService</em>.
+                        https://developer.android.com/reference/android/service/notification/NotificationListenerService
+                    </li>
+                    <li>OpenAI. (2024). <em>Chat Completions API</em>.
+                        https://platform.openai.com/docs/api-reference/chat</li>
+                    <li>Android Developers. (2023). <em>Calendar Provider</em>.
+                        https://developer.android.com/guide/topics/providers/calendar-provider</li>
+                    <li>Android Developers. (2023). <em>Room Persistence Library</em>.
+                        https://developer.android.com/training/data-storage/room</li>
+                    <li>Square, Inc. (2023). <em>OkHttp Documentation</em>. https://square.github.io/okhttp/</li>
+                    <li>Google. (2023). <em>Gson User Guide</em>.
+                        https://github.com/google/gson/blob/master/UserGuide.md</li>
+                    <li>Android Developers. (2023). <em>Preference Settings</em>.
+                        https://developer.android.com/develop/ui/views/components/settings</li>
+                    <li>Oracle. (2023). <em>Java Time API Documentation</em>.
+                        https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html</li>
+                </ol>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <!-- Chapter 7: Appendix -->
+            <section id="appendix">
+                <h1>7. נספחים</h1>
+
+                <h2>נספח א' - קוד המחלקות המלא</h2>
+
+                <h3>מחלקת AboutActivity</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import android.os.Bundle;
+
+/**
+ * About activity - displays information about the application
+ */
+public class AboutActivity extends BaseActivity {
+
+    /**
+     * Initialize the about screen
+     * @param savedInstanceState Saved instance state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_about);
+    }
+
+    /**
+     * Get the selected navigation item ID for this activity
+     * @return Navigation item ID for about section
+     */
+    @Override
+    protected int getSelectedNavItemId() {
+        return R.id.nav_about;
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת AppDatabase</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
+
+/**
+ * Main database class for the application using Room
+ */
+@Database(entities = {Event.class}, version = 1)
+@TypeConverters(Converters.class)
+public abstract class AppDatabase extends RoomDatabase {
+    /**
+     * Get the Event Data Access Object
+     * @return EventDao instance for database operations
+     */
+    public abstract EventDao EventsDao();
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת BaseActivity</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.gal.smartcalender.Settings.SettingsActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+/**
+ * Base activity class providing common navigation functionality
+ */
+public abstract class BaseActivity extends AppCompatActivity {
+    protected BottomNavigationView bottomNav;
+
+    /**
+     * Set content view with bottom navigation
+     * @param layoutResID Layout resource ID to inflate
+     */
+    @Override
+    public void setContentView(int layoutResID) {
+        // Inflate the base layout
+        LinearLayout baseLayout = (LinearLayout) getLayoutInflater()
+                .inflate(R.layout.activity_base, null);
+        // Find the content container
+        FrameLayout contentFrame = baseLayout.findViewById(R.id.base_content);
+        // Inflate the child layout into the container
+        getLayoutInflater().inflate(layoutResID, contentFrame, true);
+        // Set the composed layout as the activity content
+        super.setContentView(baseLayout);
+
+        setupBottomNavigation();
+    }
+
+    /**
+     * Setup bottom navigation view with click listeners
+     */
+    private void setupBottomNavigation() {
+        bottomNav = findViewById(R.id.base_bottom_nav);
+        bottomNav.setOnItemSelectedListener(item -> {
+            Class&lt;?&gt; targetActivity = null;
+
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_home) {
+                targetActivity = MainActivity.class;
+            } else if (itemId == R.id.nav_settings) {
+                targetActivity = SettingsActivity.class;
+            } else if (itemId == R.id.nav_about) {
+                targetActivity = AboutActivity.class;
+            }
+
+            if (!this.getClass().equals(targetActivity)) {
+                Intent intent = new Intent(this, targetActivity);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                return true;
+            }
+            return true;
+        });
+    }
+
+    /**
+     * Abstract method to get the selected navigation item ID
+     * @return Navigation item ID
+     */
+    protected abstract int getSelectedNavItemId();
+
+    /**
+     * Update navigation selection when activity resumes
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (bottomNav != null) {
+            bottomNav.setSelectedItemId(getSelectedNavItemId());
+        }
+    }
+
+    /**
+     * Initialize activity with navigation setup
+     * @param savedInstanceState Saved instance state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        super.onResume();
+        if (bottomNav != null) {
+            bottomNav.setSelectedItemId(getSelectedNavItemId());
+        }
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת CalenderManager</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import static com.gal.smartcalender.Constants.SELECTED_CALENDERS_PREFERENCE;
+
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.CalendarContract;
+import android.util.Pair;
+import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Manager class for calendar operations and integration
+ */
+public class CalenderManager {
+    private Context _ctx;
+    private SharedPreferences _sharedPreferences;
+
+    /**
+     * Constructor to initialize calendar manager
+     * @param ctx Application context
+     */
+    public CalenderManager(Context ctx){
+        _ctx = ctx;
+        this._sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+    }
+
+    /**
+     * Add event to all available calendars on the device
+     * @param event Event to add
+     */
+    public void addToAllCalendars(Event event) {
+        // Check for calendar permissions
+        if (ContextCompat.checkSelfPermission(_ctx, android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(_ctx, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(_ctx, "Calendar permissions are required to add events", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        ContentResolver cr = _ctx.getContentResolver();
+        Uri calendarsUri = CalendarContract.Calendars.CONTENT_URI;
+        String[] projection = new String[]{
+                CalendarContract.Calendars._ID,
+                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME
+        };
+
+        Cursor cursor = cr.query(calendarsUri, projection, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long calID = cursor.getLong(0);
+                
+                ContentValues values = new ContentValues();
+                values.put(CalendarContract.Events.DTSTART, event.startDate.toInstant().toEpochMilli());
+                values.put(CalendarContract.Events.DTEND, event.endDate.toInstant().toEpochMilli());
+                values.put(CalendarContract.Events.TITLE, event.eventInfo);
+                values.put(CalendarContract.Events.DESCRIPTION, event.eventInfo);
+                values.put(CalendarContract.Events.CALENDAR_ID, calID);
+                values.put(CalendarContract.Events.EVENT_TIMEZONE, event.startDate.getZone().getId());
+
+                Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+    }
+
+    /**
+     * Add event to a specific calendar
+     * @param event Event to add
+     * @param calendarId Target calendar ID
+     */
+    public void addToSpecificCalendar(Event event, long calendarId) {
+        if (ContextCompat.checkSelfPermission(_ctx, android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(_ctx, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(_ctx, "Calendar permissions are required to add events", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        ContentResolver cr = _ctx.getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.DTSTART, event.startDate.toInstant().toEpochMilli());
+        values.put(CalendarContract.Events.DTEND, event.endDate.toInstant().toEpochMilli());
+        values.put(CalendarContract.Events.TITLE, event.eventInfo);
+        values.put(CalendarContract.Events.DESCRIPTION, event.eventInfo);
+        values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, event.startDate.getZone().getId());
+
+        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+    }
+
+    /**
+     * Add event to user-selected calendars from preferences
+     * @param event Event to add
+     */
+    public void addToSelectedCalenders(Event event){
+        Set&lt;String&gt; selectedCalenders = _sharedPreferences.getStringSet(SELECTED_CALENDERS_PREFERENCE, new HashSet&lt;String&gt;());
+        for (String calId: selectedCalenders) {
+            addToSpecificCalendar(event, Long.parseLong(calId));
+        }
+    }
+
+    /**
+     * Get list of available calendars with their IDs and names
+     * @return List of pairs containing calendar ID and display name
+     */
+    public List&lt;Pair&lt;Long, String&gt;&gt; getCalendarIdsAndNames() {
+        List&lt;Pair&lt;Long, String&gt;&gt; calendars = new ArrayList&lt;&gt;();
+        if (ContextCompat.checkSelfPermission(_ctx, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(_ctx, "Calendar permission required", Toast.LENGTH_LONG).show();
+            return calendars;
+        }
+
+        String[] projection = new String[] {
+                CalendarContract.Calendars._ID,
+                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME
+        };
+
+        Cursor cursor = _ctx.getContentResolver().query(
+                CalendarContract.Calendars.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+
+        if (cursor != null) {
+            int idCol = cursor.getColumnIndex(CalendarContract.Calendars._ID);
+            int nameCol = cursor.getColumnIndex(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME);
+            while (cursor.moveToNext()) {
+                long id = cursor.getLong(idCol);
+                String name = cursor.getString(nameCol);
+                calendars.add(new Pair&lt;&gt;(id, name));
+            }
+            cursor.close();
+        }
+        return calendars;
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת ChatGptApi</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import com.google.gson.Gson;
+import java.util.HashMap;
+import java.util.Map;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
+/**
+ * API wrapper for OpenAI ChatGPT integration
+ */
+public class ChatGptApi {
+
+    private String _api_key;
+    private String _model;
+    private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+
+    /**
+     * Constructor, init the api key
+     * @param api_key OpenAI API key
+     */
+    ChatGptApi(String api_key){
+        this._api_key = api_key;
+    }
+
+    /**
+     * Setter function for the model
+     * @param model AI model to use (e.g., gpt-3.5-turbo, gpt-4)
+     */
+    void setModel(String model){
+        this._model = model;
+    }
+
+    /**
+     * Function to send a query, and run a callback on success.
+     * @param messages a JsonArray(Object[]) of the messages field in the OpenAI completion API
+     * @param callback an okhttp callback object, allows to control what happens when the response is received
+     */
+    public void sendQuery(Object[] messages , Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+
+        Map&lt;String, Object&gt; requestBody = new HashMap&lt;&gt;();
+        requestBody.put("model", _model);
+        requestBody.put("messages", messages);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(requestBody);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .addHeader("Authorization", "Bearer " + _api_key)
+                .addHeader("Content-Type", "application/json")
+                .post(RequestBody.create(json, MediaType.get("application/json; charset=utf-8")))
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת ChatGptDataProcessor</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.service.notification.StatusBarNotification;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
+/**
+ * Data processor that uses ChatGPT to analyze notifications and create events
+ */
+public class ChatGptDataProcessor extends DataProcessor {
+    private ChatGptApi _chatGptApi = null;
+    SharedPreferences _sharedPreferences = null;
+
+    /**
+     * Constructor to initialize ChatGPT data processor
+     * @param context Application context
+     */
+    ChatGptDataProcessor(Context context) {
+        super(context);
+        this._chatGptApi = new ChatGptApi(com.gal.smartcalender.BuildConfig.CHATGPT_API_KEY);
+        this._sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    /**
+     * Process notification through ChatGPT analysis
+     * @param sbn The received status bar notification
+     */
+    @Override
+    public void processNotification(StatusBarNotification sbn) {
+        Set&lt;String&gt; selectedApps = _sharedPreferences.getStringSet("selected_apps", new HashSet&lt;String&gt;());
+        String aiModel = _sharedPreferences.getString("ai_model", "none");
+        if (aiModel.equals("none")) {
+            Log.d("Model is none", "returning");
+            return;
+        }
+        _chatGptApi.setModel(aiModel);
+        if (!selectedApps.contains(sbn.getPackageName())) {
+            Log.d("Skipped app:", sbn.getPackageName());
+            return;
+        }
+        Gson gson = new Gson();
+        Map&lt;String, Object&gt; noti_obj = new HashMap&lt;&gt;();
+        String packageName = sbn.getPackageName();
+        String appName = packageName.toString();
+        PackageManager packageManager = _context.getPackageManager();
+        try {
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
+            appName = (String) packageManager.getApplicationLabel(applicationInfo);
+        } catch (Exception e){
+            // Keep package name if can't get app name
+        }
+
+        Log.d("package name", packageName);
+        noti_obj.put("package name", packageName);
+        for (String key : sbn.getNotification().extras.keySet()) {
+            Object value = sbn.getNotification().extras.get(key);
+            if (value != null) {
+                Log.d(key, value.toString());
+                noti_obj.put(key, value.toString());
+            }
+        }
+
+        String jsonObj = gson.toJson(noti_obj);
+        Log.d("Json array", jsonObj);
+
+        Object[] messages = new Object[]{
+                new HashMap&lt;String, String&gt;() {{
+                    put("role", "system");
+                    put("content", LLMUtils.generate_system_message(_context));
+                }},
+                new HashMap&lt;String, String&gt;() {{
+                    put("role", "user");
+                    put("content", jsonObj);
+                }}
+        };
+
+        final String finalAppName = appName;
+        this._chatGptApi.sendQuery(messages, new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("ChatGPT", "API call failed", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                decodeGptResponse(response, finalAppName);
+            }
+        });
+    }
+
+    /**
+     * Decode ChatGPT response and create Event object
+     * @param response HTTP response from ChatGPT
+     * @param app_name Name of the source application
+     */
+    private void decodeGptResponse(Response response, String app_name) {
+        try {
+            Gson gson = new Gson();
+            if (response.body() != null) {
+                String resp = response.body().string();
+                Log.d("response:", resp);
+                JsonObject jsonObject = JsonParser.parseString(resp).getAsJsonObject();
+                JsonArray choices = jsonObject.getAsJsonArray("choices");
+                JsonObject firstChoice = choices.get(0).getAsJsonObject();
+                JsonObject message = firstChoice.getAsJsonObject("message");
+                String content = message.get("content").getAsString();
+                if (content.contains(Constants.no_event_ret)) {
+                    Log.d("ChatGpt said:", "No event");
+                    return;
+                }
+
+                String cleanedContent = content.replaceAll("``````", "").trim();
+                JsonObject jsonContent = gson.fromJson(cleanedContent, JsonObject.class);
+
+                String descriptionStr = jsonContent.get("description").getAsString();
+                String startDateStr = jsonContent.get("start_date").getAsString();
+                String endDateStr = jsonContent.get("end_date").getAsString();
+                String urgencyStr = jsonContent.get("urgency").getAsString();
+                String importanceStr = jsonContent.get("importance").getAsString();
+
+                Event event = new Event();
+                event.data = resp;
+                event.dataSource = app_name;
+                event.eventInfo = descriptionStr;
+                event.urgency = Float.parseFloat(urgencyStr);
+                event.importance = Float.parseFloat(importanceStr);
+                event.startDate = ZonedDateTime.parse(startDateStr, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+                event.endDate = ZonedDateTime.parse(endDateStr, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+                _db.EventsDao().insertAll(event);
+            }
+        } catch (Exception e) {
+            Log.e("ChatGPT", "Error processing response", e);
+            e.printStackTrace();
+        }
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת Constants</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+/**
+ * Application constants interface
+ */
+public interface Constants {
+    /**
+     * Default system prompt for LLM
+     */
+    public static final String DEFAULT_SYS_PROMPT =
+            "You will receive notifications in JSON format. Each notification contains details about an event. " +
+                    "Your task is to extract relevant information and generate a structured calendar event in the following JSON format:\n\n" +
+                    "{\n" +
+                    "  \"start_date\": \"&lt;ISO 8601 DateTime format&gt;\", // Make sure you provide the right timezone in the ISO 8601 format, look at the given time\n" +
+                    "  \"end_date\": \"&lt;ISO 8601 DateTime format&gt;\", // Make sure you provide the right timezone in the ISO 8601 format, look at the given time\n" +
+                    "  \"description\": \"&lt;Concise event summary&gt;\",\n" +
+                    "  \"urgency\": &lt;0-1 score&gt;,\n" +
+                    "  \"importance\": &lt;0-1 score&gt;\n" +
+                    "}\n\n" +
+                    "- Only create events for meaningful, actionable, or scheduled activities. " +
+                    "Do NOT create calendar events for trivial or generic notifications, such as \"You received a message\", \"New notification received\", or app/system alerts, " +
+                    "unless they clearly describe a time-based activity the user must act on.\n" +
+                    "- Extract Dates: Identify the start and end DateTime from the notification. Use ISO 8601 DateTime format (YYYY-MM-DDTHH:MM:SSZ). " +
+                    "- Generate Description: Summarize the event concisely. Remove unnecessary details.\n" +
+                    "- Assign Urgency (0-1): Score how time-sensitive the event is (1 = immediate action needed, 0 = not urgent).\n" +
+                    "- Assign Importance (0-1): Score how significant the event is (1 = critical, 0 = trivial).\n\n" +
+                    "If any required field is missing in the notification, infer it based on context or use sensible defaults. " +
+                    "Always ensure the output is well-formatted JSON.\n\n" +
+                    "The current date and time is: &lt;CURR_DATE_TIME&gt;.\n" +
+                    "If the notification does NOT describe a real or actionable event, return the string NO_EVENT. Do not create unnecessary or spammy events!";
+
+    /**
+     * Database name
+     */
+    public static final String db_name = "event-db";
+
+    /**
+     * Return string when no event should be created
+     */
+    public static final String no_event_ret = "NO_EVENT";
+
+    /**
+     * Preference key for selected apps
+     */
+    public static final String SELECTED_APPS_PREFERENCE  = "selected_apps";
+
+    /**
+     * Preference key for selected calendars
+     */
+    public static final String SELECTED_CALENDERS_PREFERENCE = "selected_calenders";
+
+    /**
+     * App preferences file name
+     */
+    public static final String APP_PREF_NAME = "apppref";
+
+    /**
+     * System prompt preference key
+     */
+    public static final String SYS_PROMPT_TXT_PREFERENCE_NAME = "sys_prompt_pref";
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת Converters</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import androidx.room.TypeConverter;
+
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * Type converters for Room database to handle date/time objects
+ */
+public class Converters {
+
+    private static final DateTimeFormatter formatterLocalDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    /**
+     * Convert LocalDateTime to String for database storage
+     * @param dateTime LocalDateTime to convert
+     * @return String representation
+     */
+    @TypeConverter
+    public static String fromLocalDateTime(LocalDateTime dateTime) {
+        return dateTime != null ? dateTime.format(formatterLocalDateTime) : null;
+    }
+
+    /**
+     * Convert String to LocalDateTime from database
+     * @param dateTimeString String to convert
+     * @return LocalDateTime object
+     */
+    @TypeConverter
+    public static LocalDateTime toLocalDateTime(String dateTimeString) {
+        return dateTimeString != null ? LocalDateTime.parse(dateTimeString, formatterLocalDateTime) : null;
+    }
+
+    /**
+     * Convert OffsetDateTime to String for database storage
+     * @param dateTime OffsetDateTime to convert
+     * @return String representation
+     */
+    @TypeConverter
+    public static String fromOffsetDateTime(OffsetDateTime dateTime) {
+        return dateTime != null ? dateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) : null;
+    }
+
+    /**
+     * Convert String to OffsetDateTime from database
+     * @param dateTimeString String to convert
+     * @return OffsetDateTime object
+     */
+    @TypeConverter
+    public static OffsetDateTime toOffsetDateTime(String dateTimeString) {
+        return dateTimeString != null ? OffsetDateTime.parse(dateTimeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME) : null;
+    }
+
+    /**
+     * Convert ZonedDateTime to String for database storage
+     * @param dateTime ZonedDateTime to convert
+     * @return String representation
+     */
+    @TypeConverter
+    public static String fromZonedDateTime(ZonedDateTime dateTime) {
+        return dateTime != null ? dateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) : null;
+    }
+
+    /**
+     * Convert String to ZonedDateTime from database
+     * @param dateTimeString String to convert
+     * @return ZonedDateTime object
+     */
+    @TypeConverter
+    public static ZonedDateTime toZoneDateTime(String dateTimeString) {
+        return dateTimeString != null ? ZonedDateTime.parse(dateTimeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME) : null;
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת DataBaseSingletone</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import android.content.Context;
+import androidx.room.Room;
+
+/**
+ * Singleton pattern implementation for database access
+ */
+public class DataBaseSingletone {
+    static private AppDatabase _db = null;
+
+    /**
+     * Get singleton instance of the database
+     * @param context Application context
+     * @return AppDatabase instance
+     */
+    public static AppDatabase get_db(Context context){
+        if(_db == null){
+            _db= Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, Constants.db_name).build();
+        }
+        return _db;
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת DataProcessor (מופשטת)</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import android.content.Context;
+import android.service.notification.StatusBarNotification;
+
+/**
+ * Abstract base class for data processors that handle notifications
+ */
+public abstract class DataProcessor {
+
+    protected Context _context;
+    static protected AppDatabase _db = null;
+
+    /**
+     * Constructor to initialize data processor
+     * @param context Application context
+     */
+    DataProcessor(Context context) {
+        _context = context;
+        if(_db == null){
+            _db = DataBaseSingletone.get_db(context.getApplicationContext());
+        }
+    }
+
+    /**
+     * Abstract method to process notifications
+     * @param sbn Status bar notification to process
+     */
+    public abstract void processNotification(StatusBarNotification sbn);
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת EditSystemPromptActivity</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import static com.gal.smartcalender.Constants.APP_PREF_NAME;
+import static com.gal.smartcalender.Constants.SYS_PROMPT_TXT_PREFERENCE_NAME;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * Activity for editing the system prompt sent to ChatGPT
+ */
+public class EditSystemPromptActivity extends AppCompatActivity {
+
+    EditText editText = null;
+    Button save_btn = null;
+    Button cancel_btn = null;
+    static final String PREF_EMPTY = "PREF_EMPTY";
+
+    /**
+     * Initialize the system prompt editing screen
+     * @param savedInstanceState Saved instance state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_system_prompt);
+        editText = findViewById(R.id.promptEditText);
+        editText.setText(LLMUtils.get_sys_message_template(getApplicationContext()));
+        save_btn = findViewById(R.id.saveButton);
+        save_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences prefs = getApplicationContext().getSharedPreferences(APP_PREF_NAME, MODE_PRIVATE);
+                prefs.edit().putString(SYS_PROMPT_TXT_PREFERENCE_NAME, editText.getText().toString()).apply();
+                finish();
+            }
+        });
+        cancel_btn = findViewById(R.id.cancelButton);
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת Event + EventDao</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import androidx.lifecycle.LiveData;
+import androidx.room.ColumnInfo;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Entity;
+import androidx.room.Insert;
+import androidx.room.PrimaryKey;
+import androidx.room.Query;
+
+import java.time.ZonedDateTime;
+import java.util.List;
+
+/**
+ * Data Access Object for Event operations
+ */
+@Dao
+interface EventDao {
+    /**
+     * Get all events from database
+     * @return List of all events
+     */
+    @Query("SELECT * FROM Event")
+    public List&lt;Event&gt; getAll();
+
+    /**
+     * Insert events into database
+     * @param events Events to insert
+     */
+    @Insert
+    public void insertAll(Event... events);
+
+    /**
+     * Delete specific event
+     * @param event Event to delete
+     */
+    @Delete
+    public void delete(Event event);
+
+    /**
+     * Delete multiple events
+     * @param events List of events to delete
+     */
+    @Delete
+    public void deleteBulk(List&lt;Event&gt; events);
+
+    /**
+     * Get all events as LiveData for UI updates
+     * @return LiveData containing list of events
+     */
+    @Query("select * from Event")
+    public LiveData&lt;List&lt;Event&gt;&gt; getAllLive();
+}
+
+/**
+ * Entity representing a calendar event
+ */
+@Entity
+public class Event {
+    @PrimaryKey(autoGenerate = true)
+    public int eventId; // Database eventId
+
+    @ColumnInfo(name = "DataSource") // Notification, Gmail app, whatever...
+    public String dataSource;
+
+    @ColumnInfo(name = "Data") // The data to parse into the calendar event
+    public String data;
+
+    @ColumnInfo(name = "EventDescription") // The Information to write into the calendar app
+    public String eventInfo;
+
+    @ColumnInfo(name = "StartDate") // The start date of the event
+    public ZonedDateTime startDate;
+
+    @ColumnInfo(name = "EndDate") // The end date of the event
+    public ZonedDateTime endDate;
+
+    @ColumnInfo(name = "Urgency") // Score 0-1 on how urgent is the event
+    public float urgency;
+
+    @ColumnInfo(name = "Importance") // Score 0-1 on how important is the event
+    public float importance;
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת LLMUtils</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.gal.smartcalender.Constants.APP_PREF_NAME;
+import static com.gal.smartcalender.Constants.DEFAULT_SYS_PROMPT;
+import static com.gal.smartcalender.Constants.SYS_PROMPT_TXT_PREFERENCE_NAME;
+import static com.gal.smartcalender.EditSystemPromptActivity.PREF_EMPTY;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * Utility class for LLM operations and prompt generation
+ */
+public class LLMUtils {
+    /**
+     * Gets the current time zone in UTC offset format
+     * @return String representation of timezone (e.g., "UTC+2", "UTC-5")
+     */
+    static private String get_curr_time_zone() {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
+        int offsetHours = zonedDateTime.getOffset().getTotalSeconds() / 3600;
+        return offsetHours >= 0 ? "UTC+" + offsetHours : "UTC" + offsetHours;
+    }
+
+    /**
+     * Get system message template from preferences
+     * @param context Application context
+     * @return System message template string
+     */
+    static protected String get_sys_message_template(Context context){
+        SharedPreferences prefs = context.getSharedPreferences(APP_PREF_NAME, MODE_PRIVATE);
+        String curr_prompt = prefs.getString(SYS_PROMPT_TXT_PREFERENCE_NAME, PREF_EMPTY);
+
+        if(curr_prompt.equals(PREF_EMPTY)){
+            prefs.edit().putString(SYS_PROMPT_TXT_PREFERENCE_NAME, DEFAULT_SYS_PROMPT).apply();
+            curr_prompt = DEFAULT_SYS_PROMPT;
+        }
+
+        return curr_prompt;
+    }
+
+    /**
+     * Generates complete system message for LLM with current date/time
+     * @param context Application context
+     * @return Complete system message with placeholders replaced
+     */
+    static protected String generate_system_message(Context context) {
+        ZonedDateTime zonedDateTimeUTC = ZonedDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime zonedDateTimeCURR = ZonedDateTime.now();
+        String iso8601LOCAL = zonedDateTimeCURR.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        String iso8601UTC = zonedDateTimeUTC.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        return get_sys_message_template(context)
+                .replace("&lt;CURR_DATE_TIME_UTC&gt;", iso8601UTC)
+                .replace("&lt;CURR_TIME_ZONE&gt;", get_curr_time_zone())
+                .replace("&lt;CURR_DATE_TIME&gt;", iso8601LOCAL);
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת MainActivity</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import android.Manifest;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.text.TextUtils;
+import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.concurrent.CompletableFuture;
+
+/**
+ * Main activity displaying list of detected events from notifications
+ */
+public class MainActivity extends BaseActivity {
+    RecyclerView recyclerView = null;
+    AppDatabase db = null;
+    RecyclerViewEventsAdapter recyclerViewEventsAdapter = null;
+    Toolbar toolbar = null;
+    CheckBox selectAll = null;
+    TextView emptyInstructionTextView = null;
+    CalenderManager calenderManager = null;
+
+    private static final int REQUEST_CALENDAR_PERMISSION = 100;
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 101;
+
+    /**
+     * Initialize the main screen with UI components and permissions
+     * @param savedInstanceState Saved instance state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Request notification access permission
+        if (!isNotificationServiceEnabled()) {
+            requestNotificationAccessPermission();
+        }
+        requestCalendarPermissions();
+
+        calenderManager = new CalenderManager(this);
+        db = DataBaseSingletone.get_db(getApplicationContext());
+
+        // Initialize UI components
+        setupRecyclerView();
+        setupToolbar();
+        setupSelectAll();
+        
+        emptyInstructionTextView = findViewById(R.id.no_events_text_view);
+        recyclerViewEventsAdapter = new RecyclerViewEventsAdapter(db, this, selectAll, emptyInstructionTextView, toolbar);
+        recyclerView.setAdapter(recyclerViewEventsAdapter);
+    }
+
+    /**
+     * Setup RecyclerView with LinearLayoutManager
+     */
+    private void setupRecyclerView() {
+        recyclerView = findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    /**
+     * Setup toolbar with menu item click listeners
+     */
+    private void setupToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.action_delete){
+                    CompletableFuture.runAsync(() -&gt; {
+                        db.EventsDao().deleteBulk(recyclerViewEventsAdapter.get_checked_events().stream().toList());
+                    }).thenRun(() -&gt; {
+                        runOnUiThread(() -&gt; {
+                            recyclerViewEventsAdapter.get_checked_events().clear();
+                            toggleBulkOp();
+                        });
+                    });
+                }
+                else if(item.getItemId() == R.id.action_add_calendar){
+                    CompletableFuture.runAsync(() -&gt; {
+                        for(Event event : recyclerViewEventsAdapter.get_checked_events()){
+                            calenderManager.addToSelectedCalenders(event);
+                            db.EventsDao().delete(event);
+                        }
+                    }).thenRun(() -&gt; {
+                        runOnUiThread(() -&gt; {
+                            recyclerViewEventsAdapter.get_checked_events().clear();
+                            toggleBulkOp();
+                        });
+                    });
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Setup select all checkbox functionality
+     */
+    private void setupSelectAll() {
+        selectAll = findViewById(R.id.select_all);
+        selectAll.setOnClickListener(v -&gt; {
+            if (((CheckBox) v).isChecked()) {
+                recyclerViewEventsAdapter.selectAll();
+            } else {
+                recyclerViewEventsAdapter.clearSelection();
+            }
+            toggleBulkOp();
+        });
+    }
+
+    /**
+     * Check if notification listener service is enabled for this app
+     * @return true if enabled, false otherwise
+     */
+    private boolean isNotificationServiceEnabled() {
+        String pkgName = getPackageName();
+        final String flat = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
+        if (flat != null && !flat.isEmpty()) {
+            final String[] names = flat.split(":");
+            for (String name : names) {
+                final ComponentName cn = ComponentName.unflattenFromString(name);
+                if (cn != null && TextUtils.equals(pkgName, cn.getPackageName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Request notification access permission from user
+     */
+    private void requestNotificationAccessPermission() {
+        Toast.makeText(this, "Please enable notification access for this app", Toast.LENGTH_LONG).show();
+        try {
+            ComponentName cn = new ComponentName(this, NotificationService.class);
+            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+            intent.putExtra(":settings:fragment_args_key", cn.flattenToString());
+            intent.putExtra(":settings:show_fragment_args", cn.flattenToString());
+            intent.putExtra(":settings:show_fragment", "NotificationAccessSettings");
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            try {
+                Intent fallbackIntent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(fallbackIntent);
+            } catch (ActivityNotFoundException ex) {
+                Toast.makeText(this, "Unable to open settings", Toast.LENGTH_SHORT).show();
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Request calendar read/write permissions
+     */
+    public void requestCalendarPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CALENDAR) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_CALENDAR)) {
+                Toast.makeText(this, "Calendar permissions are needed to add events", Toast.LENGTH_LONG).show();
+            }
+
+            ActivityCompat.requestPermissions(this,
+                    new String[] {
+                            Manifest.permission.READ_CALENDAR,
+                            Manifest.permission.WRITE_CALENDAR
+                    },
+                    REQUEST_CALENDAR_PERMISSION
+            );
+        }
+    }
+
+    /**
+     * Handle permission request results
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @Nullable String[] permissions, @Nullable int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CALENDAR_PERMISSION:
+                if (grantResults.length &gt; 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Calendar permissions granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Calendar permissions denied", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_NOTIFICATION_PERMISSION:
+                if (isNotificationServiceEnabled()) {
+                    Toast.makeText(this, "Notification access granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Notification access denied", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    /**
+     * Toggle bulk operation menu visibility based on selection
+     */
+    private void toggleBulkOp() {
+        if (recyclerViewEventsAdapter.get_checked_events().isEmpty()){
+            toolbar.getMenu().clear();
+        } else {
+            if(!toolbar.getMenu().hasVisibleItems()){
+                toolbar.inflateMenu(R.menu.batch_event_operation_menu);
+            }
+        }
+    }
+
+    @Override
+    protected int getSelectedNavItemId() {
+        return R.id.nav_home;
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת NotificationService</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import static android.app.Notification.FLAG_GROUP_SUMMARY;
+
+import android.service.notification.NotificationListenerService;
+import android.service.notification.StatusBarNotification;
+import android.util.Log;
+
+/**
+ * Background service that listens for system notifications
+ */
+public class NotificationService extends NotificationListenerService {
+
+    private static final String TAG = "NotificationListener";
+    private DataProcessor _dataProcessor = null;
+
+    /**
+     * Called when a new notification is posted
+     * @param sbn The status bar notification that was posted
+     */
+    @Override
+    public void onNotificationPosted(StatusBarNotification sbn) {
+        // Ignore group summary notifications
+        if ((sbn.getNotification().flags & FLAG_GROUP_SUMMARY) != 0) {
+            return;
+        }
+
+        if (_dataProcessor == null) {
+            _dataProcessor = new ChatGptDataProcessor(getApplicationContext());
+        }
+        _dataProcessor.processNotification(sbn);
+    }
+
+    /**
+     * Called when a notification is removed
+     * @param sbn The status bar notification that was removed
+     */
+    @Override
+    public void onNotificationRemoved(StatusBarNotification sbn) {
+        Log.d(TAG, "Notification Removed: " + sbn.getPackageName());
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת RecyclerViewEventsAdapter</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+import android.os.Handler;
+import android.os.Looper;
+import android.util.ArraySet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
+/**
+ * RecyclerView adapter for displaying events list
+ */
+public class RecyclerViewEventsAdapter extends RecyclerView.Adapter&lt;RecyclerViewEventsAdapter.ViewHolder&gt; {
+    private static ArrayList&lt;Event&gt; _localDataSet;
+    private static AppDatabase _appDatabase;
+    private static ArraySet&lt;Event&gt; _checked_events = null;
+    private static CheckBox _selectAllCheckBox = null;
+    private static Toolbar _toolbar = null;
+    private static CalenderManager calenderManager = null;
+
+    /**
+     * Convert ZonedDateTime to human readable string
+     * @param zonedDateTime DateTime to convert
+     * @return Formatted date string
+     */
+    public static String ZonedDateTimeToHumanReadableStr(ZonedDateTime zonedDateTime) {
+        ZonedDateTime systemZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
+        return systemZonedDateTime.format(formatter);
+    }
+
+    /**
+     * Get currently checked events
+     * @return ArraySet of checked events
+     */
+    public ArraySet&lt;Event&gt; get_checked_events() {
+        return _checked_events;
+    }
+
+    /**
+     * Clear all selections
+     */
+    public void clearSelection() {
+        if(_checked_events != null){
+            _checked_events.clear();
+            new Handler(Looper.getMainLooper()).post(this::notifyDataSetChanged);
+        }
+    }
+
+    /**
+     * Select all events
+     */
+    public void selectAll() {
+        if(_checked_events != null){
+            _checked_events.clear();
+            _checked_events.addAll(_localDataSet);
+            new Handler(Looper.getMainLooper()).post(this::notifyDataSetChanged);
+        }
+    }
+
+    /**
+     * Check if all events are selected
+     * @return true if all events are selected
+     */
+    public static boolean isAllSelected() {
+        return _checked_events.size() == _localDataSet.size();
+    }
+
+    /**
+     * ViewHolder class for event items
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView eventDescriptionView;
+        private final TextView eventStartDate;
+        private final TextView eventEndDate;
+        private final TextView eventImportance;
+        private final TextView eventUrgency;
+        private final TextView appName;
+        private final CheckBox checkBox;
+        private final Button addToCalenderButton;
+
+        /**
+         * ViewHolder constructor
+         * @param view Item view
+         */
+        public ViewHolder(View view) {
+            super(view);
+            eventDescriptionView = view.findViewById(R.id.eventDescription);
+            eventStartDate = view.findViewById(R.id.startDateTime);
+            eventEndDate = view.findViewById(R.id.endDateTime);
+            eventImportance = view.findViewById(R.id.importance);
+            eventUrgency = view.findViewById(R.id.urgency);
+            appName = view.findViewById(R.id.app_name);
+            checkBox = view.findViewById(R.id.checkBox);
+            addToCalenderButton = view.findViewById(R.id.addToCalendarButton);
+            if(calenderManager == null){
+                calenderManager = new CalenderManager(view.getContext());
+            }
+        }
+
+        /**
+         * Bind event data to view components
+         * @param event Event to display
+         */
+        public void bind(Event event) {
+            eventDescriptionView.setText(event.eventInfo);
+            eventStartDate.setText(ZonedDateTimeToHumanReadableStr(event.startDate));
+            eventEndDate.setText(ZonedDateTimeToHumanReadableStr(event.endDate));
+            eventImportance.setText(String.valueOf(event.importance));
+            appName.setText(event.dataSource);
+            eventUrgency.setText(String.valueOf(event.urgency));
+
+            // Setup add to calendar button
+            addToCalenderButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   calenderManager.addToSelectedCalenders(event);
+                    _appDatabase.EventsDao().delete(event);
+                }
+            });
+
+            // Setup checkbox for selection
+            if (_checked_events == null) {
+                _checked_events = new ArraySet&lt;Event&gt;();
+            }
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(((CheckBox)v).isChecked()) {
+                        _checked_events.add(event);
+                    }else{
+                        _checked_events.remove(event);
+                    }
+                    if (isAllSelected()) {
+                        _selectAllCheckBox.setChecked(true);
+                    } else {
+                        _selectAllCheckBox.setChecked(false);
+                    }
+                    if (_checked_events.isEmpty()){
+                        _toolbar.getMenu().clear();
+                    } else {
+                        if(!_toolbar.getMenu().hasVisibleItems()){
+                            _toolbar.inflateMenu(R.menu.batch_event_operation_menu);
+                        }
+                    }
+                }
+            });
+            
+            if (_checked_events.contains(event)) {
+                checkBox.setChecked(true);
+            } else {
+                checkBox.setChecked(false);
+            }
+        }
+    }
+
+    /**
+     * Constructor for RecyclerViewEventsAdapter
+     * @param database App database instance
+     * @param lifecycleOwner Lifecycle owner for LiveData observation
+     * @param selectAllCheckBox Select all checkbox reference
+     * @param emptyInstructTextView Empty state text view
+     * @param toolbar Toolbar reference for menu operations
+     */
+    public RecyclerViewEventsAdapter(AppDatabase database, LifecycleOwner lifecycleOwner, CheckBox selectAllCheckBox, TextView emptyInstructTextView, Toolbar toolbar) {
+        _appDatabase = database;
+        _selectAllCheckBox = selectAllCheckBox;
+        _localDataSet = new ArrayList&lt;Event&gt;();
+        _toolbar = toolbar;
+        
+        _appDatabase.EventsDao().getAllLive().observe(lifecycleOwner, events -&gt; {
+            _localDataSet.clear();
+            _localDataSet.addAll(events);
+            if(events.isEmpty()) emptyInstructTextView.setVisibility(VISIBLE); 
+            else emptyInstructTextView.setVisibility(GONE);
+            notifyDataSetChanged();
+        });
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.item_calendar_event, viewGroup, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        viewHolder.bind(_localDataSet.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return _localDataSet.size();
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת SettingsActivity</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender.Settings;
+
+import android.os.Bundle;
+import com.gal.smartcalender.BaseActivity;
+import com.gal.smartcalender.R;
+
+/**
+ * Settings activity that hosts the settings fragment
+ */
+public class SettingsActivity extends BaseActivity {
+    
+    /**
+     * Initialize settings screen with fragment
+     * @param savedInstanceState Saved instance state
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.settings_layout);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new SettingsFragment())
+                .commit();
+    }
+
+    @Override
+    protected int getSelectedNavItemId() {
+        return R.id.nav_settings;
+    }
+}
+                    </pre>
+                </div>
+
+                <h3>מחלקת SettingsFragment</h3>
+                <div class="code-block">
+                    <pre>
+package com.gal.smartcalender.Settings;
+
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.Bundle;
+import android.util.Pair;
+
+import androidx.preference.MultiSelectListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+
+import com.gal.smartcalender.AboutActivity;
+import com.gal.smartcalender.CalenderManager;
+import com.gal.smartcalender.Constants;
+import com.gal.smartcalender.EditSystemPromptActivity;
+import com.gal.smartcalender.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Settings fragment that manages app preferences
+ */
+public class SettingsFragment extends PreferenceFragmentCompat {
+
+    /**
+     * Create preferences from XML and setup dynamic content
+     * @param savedInstanceState Saved instance state
+     * @param rootKey Root preference key
+     */
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.prefrences, rootKey);
+        populateInstalledApps();
+        populateCalenders();
+        
+        // Setup about activity preference
+        Preference openAboutActivityPref = findPreference("open_about_activity");
+        if (openAboutActivityPref != null) {
+            openAboutActivityPref.setOnPreferenceClickListener(preference -&gt; {
+                Intent intent = new Intent(getActivity(), AboutActivity.class);
+                startActivity(intent);
+                return true;
+            });
+        }
+        
+        // Setup system prompt edit preference
+        Preference openSysPromptEditActivityPref = findPreference("open_system_prompt_edit_activity");
+        if (openSysPromptEditActivityPref != null) {
+            openSysPromptEditActivityPref.setOnPreferenceClickListener(preference -&gt; {
+                Intent intent = new Intent(getActivity(), EditSystemPromptActivity.class);
+                startActivity(intent);
+                return true;
+            });
+        }
+    }
+
+    /**
+     * Populate installed apps list for selection
+     */
+    private void populateInstalledApps() {
+        MultiSelectListPreference appListPref = findPreference(Constants.SELECTED_APPS_PREFERENCE);
+        if (appListPref == null) return;
+
+        PackageManager pm = requireContext().getPackageManager();
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        List&lt;ResolveInfo&gt; pkgAppsList = pm.queryIntentActivities(mainIntent, 0);
+
+        // Create a list of app data objects for efficient sorting
+        List&lt;AppData&gt; appDataList = new ArrayList&lt;&gt;(pkgAppsList.size());
+
+        for (ResolveInfo info : pkgAppsList) {
+            String label = pm.getApplicationLabel(info.activityInfo.applicationInfo).toString();
+            appDataList.add(new AppData(label, info.activityInfo.packageName));
+        }
+
+        // Sort by app name
+        appDataList.sort((a1, a2) -&gt; a1.name.compareToIgnoreCase(a2.name));
+
+        // Convert to arrays
+        int size = appDataList.size();
+        String[] appNames = new String[size];
+        String[] packageNames = new String[size];
+
+        for (int i = 0; i &lt; size; i++) {
+            AppData data = appDataList.get(i);
+            appNames[i] = data.name;
+            packageNames[i] = data.packageName;
+        }
+
+        appListPref.setEntries(appNames);
+        appListPref.setEntryValues(packageNames);
+    }
+
+    /**
+     * Helper class for efficient app data sorting
+     */
+    private static class AppData {
+        final String name;
+        final String packageName;
+
+        AppData(String name, String packageName) {
+            this.name = name;
+            this.packageName = packageName;
+        }
+    }
+
+    /**
+     * Populate available calendars for selection
+     */
+    private void populateCalenders() {
+        MultiSelectListPreference calendarListPref = findPreference(Constants.SELECTED_CALENDERS_PREFERENCE);
+        if (calendarListPref == null) return;
+
+        CalenderManager calenderManager = new CalenderManager(this.getContext());
+        List&lt;Pair&lt;Long, String&gt;&gt; cal_list = calenderManager.getCalendarIdsAndNames();
+
+        String[] calender_names = new String[cal_list.size()];
+        String[] calender_ids = new String[cal_list.size()];
+
+        for (int i = 0; i &lt; cal_list.size(); i++) {
+            calender_names[i] = cal_list.get(i).second;
+            calender_ids[i] = Long.toString(cal_list.get(i).first);
+        }
+        
+        calendarListPref.setEntries(calender_names);
+        calendarListPref.setEntryValues(calender_ids);
+    }
+}
+                    </pre>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>הערה מסכמת:</strong> כל המחלקות במערכת כוללות תיעוד Javadoc מפורט המסביר את תפקיד כל מתודה ופרמטר. הקוד מאורגן בצורה מודולרית ועוקב אחר עקרונות הנדסת תוכנה מתקדמים כגון Separation of Concerns ו-Single Responsibility Principle.</p>
+                </div>
+
+                <h2>נספח ב' - תמונות מסכים</h2>
+                <div class="image-placeholder">
+                    [מקום לתמונות מסכים של האפליקציה - מסך ראשי, הגדרות, אודות ועריכת הודעת מערכת]
+                </div>
+
+                <h2>נספח ג' - תרשימים טכניים</h2>
+                <div class="image-placeholder">
+                    [מקום לתרשימי UML של המחלקות ותרשימי זרימה של תהליכי המערכת]
+                </div>
+
+                <h2>נספח ד' - קבצי תצורה</h2>
+                <div class="code-block">
+                    <pre>
+// קובץ build.gradle (Module: app)
+dependencies {
+    implementation 'androidx.room:room-runtime:2.4.3'
+    implementation 'androidx.room:room-ktx:2.4.3'
+    annotationProcessor 'androidx.room:room-compiler:2.4.3'
+    
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'com.google.android.material:material:1.8.0'
+}
+                    </pre>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+&lt;!-- קובץ AndroidManifest.xml --&gt;
+&lt;uses-permission android:name="android.permission.READ_CALENDAR" /&gt;
+&lt;uses-permission android:name="android.permission.WRITE_CALENDAR" /&gt;
+&lt;uses-permission android:name="android.permission.INTERNET" /&gt;
+
+&lt;service android:name=".NotificationService"
+    android:label="Smart Calendar Notification Listener"
+    android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"&gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name="android.service.notification.NotificationListenerService" /&gt;
+    &lt;/intent-filter&gt;
+&lt;/service&gt;
+                    </pre>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Simple page numbering for footer
+        document.getElementById('page-number').textContent = '1';
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Print functionality
+        function printDocument() {
+            window.print();
+        }
+
+        // Add print button functionality if needed
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                printDocument();
+            }
+        });
+    </script>
+</body>
+
+</html>

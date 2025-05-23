@@ -11,7 +11,7 @@
         android:id="@+id/infoText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit the system prompt below.\n\nAvailable placeholders:\n&lt;CURR_DATE&gt; - Will be replaced with the current date\n&lt;USER_NAME&gt; - Will be replaced with the user’s name"
+        android:text="Edit the system prompt below.\n\nAvailable placeholders:\n&lt;CURR_DATE_TIME&gt; - Will be replaced with the current date\n&lt;USER_NAME&gt; - Will be replaced with the user’s name"
         android:textSize="16sp"
         android:textColor="#DDDDDD"
         android:paddingBottom="12dp" />
