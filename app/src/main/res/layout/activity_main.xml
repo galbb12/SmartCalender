@@ -32,11 +32,13 @@
             android:id="@+id/select_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select all"
-            android:layout_gravity="end"
-            android:textColor="@color/white"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="16dp"
             android:buttonTint="@color/white"
-            android:layout_marginHorizontal="16dp"/>
+            android:text="Select all"
+            android:textColor="@color/white"
+            tools:layout_editor_absoluteX="304dp"
+            tools:layout_editor_absoluteY="8dp" />
 
 
 

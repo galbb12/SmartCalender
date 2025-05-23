@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="@string/calendar_prompt"
+        android:text="Text should be inserted from shared preferences"
         android:padding="12dp"
         android:textColor="#FFFFFF"
         android:textSize="15sp"

@@ -21,6 +21,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.concurrent.CompletableFuture;
+
 public class MainActivity extends BaseActivity {
     RecyclerView recyclerView = null;
     AppDatabase db = null;
@@ -51,33 +53,36 @@ public class MainActivity extends BaseActivity {
 
         // Initialize UI components
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if(item.getItemId() == R.id.action_delete){
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            db.EventsDao().deleteBulk(recyclerViewEventsAdapter.get_checked_events().stream().toList());
-                        }
+                    CompletableFuture.runAsync(() -> {
+                        db.EventsDao().deleteBulk(recyclerViewEventsAdapter.get_checked_events().stream().toList());
+                    }).thenRun(() -> {
+                        runOnUiThread(() -> {
+                            recyclerViewEventsAdapter.get_checked_events().clear();
+                            toggleBulkOp();
+                        });
                     });
                 }
                 else if(item.getItemId() == R.id.action_add_calendar){
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            AsyncTask.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    for(Event event : recyclerViewEventsAdapter.get_checked_events()){
-                                        calenderManager.addToSelectedCalenders(event);
-                                        db.EventsDao().delete(event);
-                                    }
-                                }
-                            });
+                    CompletableFuture.runAsync(() -> {
+                        for(Event event : recyclerViewEventsAdapter.get_checked_events()){
+                            calenderManager.addToSelectedCalenders(event);
+                            recyclerViewEventsAdapter.get_checked_events().clear();
+                            db.EventsDao().delete(event);
                         }
+                    }).thenRun(() -> {
+                        runOnUiThread(() -> {
+                            recyclerViewEventsAdapter.get_checked_events().clear();
+                            toggleBulkOp();
+                        });
                     });
                 }
                 return false;
@@ -197,7 +202,9 @@ public class MainActivity extends BaseActivity {
         if (recyclerViewEventsAdapter.get_checked_events().isEmpty()){
             toolbar.getMenu().clear();
         } else {
-            toolbar.inflateMenu(R.menu.batch_event_operation_menu);
+            if(!toolbar.getMenu().hasVisibleItems()){
+                toolbar.inflateMenu(R.menu.batch_event_operation_menu);
+            }
         }
     }
 

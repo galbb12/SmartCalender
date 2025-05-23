@@ -3,6 +3,8 @@ package com.gal.smartcalender;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
@@ -59,6 +61,15 @@ public class ChatGptDataProcessor extends DataProcessor {
         Gson gson = new Gson();
         Map<String, Object> noti_obj = new HashMap<>();
         String packageName = sbn.getPackageName();
+        String appName = packageName.toString();
+        PackageManager packageManager = _context.getPackageManager();
+        try {
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
+            appName = (String) packageManager.getApplicationLabel(applicationInfo);
+        } catch (Exception e){
+
+        }
+
         Log.d("package name", packageName);
         noti_obj.put("package name", packageName);
         for (String key : sbn.getNotification().extras.keySet()) {
@@ -76,7 +87,7 @@ public class ChatGptDataProcessor extends DataProcessor {
         Object[] messages = new Object[]{
                 new HashMap<String, String>() {{
                     put("role", "system");
-                    put("content", LLMUtils.generate_system_message());
+                    put("content", LLMUtils.generate_system_message(_context));
                 }},
                 new HashMap<String, String>() {{
                     put("role", "user");
@@ -84,6 +95,7 @@ public class ChatGptDataProcessor extends DataProcessor {
                 }}
         };
 
+        final String finalAppName = appName;
         this._chatGptApi.sendQuery(messages, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -93,14 +105,14 @@ public class ChatGptDataProcessor extends DataProcessor {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 /*Decode chatgpt json*/
-                decodeGptResponse(response);
+                decodeGptResponse(response, finalAppName);
             }
         });
 
 
     }
 
-    private void decodeGptResponse(Response response) {
+    private void decodeGptResponse(Response response, String app_name) {
         try {
             Gson gson = new Gson();
             if (response.body().equals(Constants.no_event_ret)) {
@@ -132,7 +144,7 @@ public class ChatGptDataProcessor extends DataProcessor {
 
                 Event event = new Event();
                 event.data = resp;
-                event.dataSource = "notification";
+                event.dataSource = app_name;
                 event.eventInfo = descriptionStr;
                 event.urgency = Float.parseFloat(urgencyStr);
                 event.importance = Float.parseFloat(importanceStr);

@@ -78,6 +78,7 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
         private final TextView eventEndDate;
         private final TextView eventImportance;
         private final TextView eventUrgency;
+        private final TextView appName;
         private final CheckBox checkBox;
         private final Button addToCalenderButton;
 
@@ -88,6 +89,7 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
             eventEndDate = view.findViewById(R.id.endDateTime);
             eventImportance = view.findViewById(R.id.importance);
             eventUrgency = view.findViewById(R.id.urgency);
+            appName = view.findViewById(R.id.app_name);
             checkBox = view.findViewById(R.id.checkBox);
             addToCalenderButton = view.findViewById(R.id.addToCalendarButton);
             if(calenderManager == null){
@@ -100,6 +102,7 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
             eventStartDate.setText(ZonedDateTimeToHumanReadableStr(event.startDate));
             eventEndDate.setText(ZonedDateTimeToHumanReadableStr(event.endDate));
             eventImportance.setText(String.valueOf(event.importance));
+            appName.setText(event.dataSource);
             addToCalenderButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -127,7 +130,9 @@ public class RecyclerViewEventsAdapter extends RecyclerView.Adapter<RecyclerView
                     if (_checked_events.isEmpty()){
                         _toolbar.getMenu().clear();
                     } else {
-                        _toolbar.inflateMenu(R.menu.batch_event_operation_menu);
+                        if(!_toolbar.getMenu().hasVisibleItems()){
+                            _toolbar.inflateMenu(R.menu.batch_event_operation_menu);
+                        }
                     }
                 }
             });

@@ -1,7 +1,7 @@
 package com.gal.smartcalender;
 
 public interface Constants {
-    public static final String notification_process_sys_message =
+    public static final String DEFAULT_SYS_PROMPT =
             "You will receive notifications in JSON format. Each notification contains details about an event. " +
                     "Your task is to extract relevant information and generate a structured calendar event in the following JSON format:\n\n" +
                     "{\n" +
@@ -30,6 +30,10 @@ public interface Constants {
     public static final String SELECTED_APPS_PREFERENCE  = "selected_apps";
 
     public static final String SELECTED_CALENDERS_PREFERENCE = "selected_calenders";
+
+    public static final String APP_PREF_NAME = "apppref";
+
+    public static final String SYS_PROMPT_TXT_PREFERENCE_NAME = "sys_prompt_pref";
 
 
 }
