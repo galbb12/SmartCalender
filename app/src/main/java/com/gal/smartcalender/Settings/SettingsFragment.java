@@ -59,28 +59,45 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        List<ResolveInfo> pkgAppsList = pm.queryIntentActivities(mainIntent, PackageManager.GET_META_DATA);
+        List<ResolveInfo> pkgAppsList = pm.queryIntentActivities(mainIntent, 0); // Remove GET_META_DATA flag
 
-        // Sort the list of ResolveInfo objects directly using their app labels
-        pkgAppsList.sort((r1, r2) -> {
-            String label1 = pm.getApplicationLabel(r1.activityInfo.applicationInfo).toString();
-            String label2 = pm.getApplicationLabel(r2.activityInfo.applicationInfo).toString();
-            return label1.compareToIgnoreCase(label2);
-        });
+        // Create a list of app data objects for efficient sorting
+        List<AppData> appDataList = new ArrayList<>(pkgAppsList.size());
 
-        int size = pkgAppsList.size();
+        for (ResolveInfo info : pkgAppsList) {
+            String label = pm.getApplicationLabel(info.activityInfo.applicationInfo).toString();
+            appDataList.add(new AppData(label, info.activityInfo.packageName));
+        }
+
+        // Sort once using the pre-fetched labels
+        appDataList.sort((a1, a2) -> a1.name.compareToIgnoreCase(a2.name));
+
+        // Convert to arrays
+        int size = appDataList.size();
         String[] appNames = new String[size];
         String[] packageNames = new String[size];
 
         for (int i = 0; i < size; i++) {
-            ResolveInfo info = pkgAppsList.get(i);
-            appNames[i] = pm.getApplicationLabel(info.activityInfo.applicationInfo).toString();
-            packageNames[i] = info.activityInfo.packageName;
+            AppData data = appDataList.get(i);
+            appNames[i] = data.name;
+            packageNames[i] = data.packageName;
         }
 
         appListPref.setEntries(appNames);
         appListPref.setEntryValues(packageNames);
     }
+
+    // Helper class for efficient sorting
+    private static class AppData {
+        final String name;
+        final String packageName;
+
+        AppData(String name, String packageName) {
+            this.name = name;
+            this.packageName = packageName;
+        }
+    }
+
 
     // For populating settings in the apps installed
     private void populateCalenders() {
