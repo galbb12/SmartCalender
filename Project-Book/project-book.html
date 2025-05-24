@@ -180,6 +180,10 @@
             margin-right: auto;
         }
 
+        .uml {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10%; padding: 5%;
+        }
+
         /* Code blocks */
         .code-block {
             background: #282c34;
@@ -540,7 +544,7 @@
                     </ul>
                 </div>
 
-                <img src="main_activity_explained.svg" width="700">
+                <img src="main_activity_explained.svg" width="750">
 
                 <h3>מסך הגדרות - SettingsActivity</h3>
                 <div class="info-box">
@@ -555,7 +559,7 @@
                     </ul>
                 </div>
 
-                <img src="settings_activity_explained.svg" width="700">
+                <img src="settings_activity_explained.svg" width="800">
 
                 <h3>מסך אודות - AboutActivity</h3>
                 <div class="info-box">
@@ -563,7 +567,7 @@
                     <p><strong>תיאור המסך:</strong> מסך מידע סטטי עם פרטי האפליקציה</p>
                 </div>
 
-                <img src="about_activity_explained.svg" width="700">
+                <img src="about_activity_explained.svg" width="800">
 
                 <h3>מסך עריכת הודעת מערכת - EditSystemPromptActivity</h3>
                 <div class="info-box">
@@ -577,33 +581,11 @@
                     </ul>
                 </div>
 
-                <img src="edit_sys_prompt_activity_explained.svg" width="700">
-
-                <h2>2.2 תרשים מסכים</h2>
-
-                <div class="image-placeholder">
-                    [מקום לתרשים Screen Flow Diagram]
-                </div>
-
-                <div class="code-block">
-                    <pre>
-MainActivity (מסך ראשי)
-    ↓ ← → (ניווט תחתון)
-    ↓
-SettingsActivity (הגדרות)
-    ↓
-EditSystemPromptActivity (עריכת הודעת מערכת)
-    ↓ ← → (ניווט תחתון)
-    ↓
-AboutActivity (אודות)
-                    </pre>
-                </div>
+                <img src="edit_sys_prompt_activity_explained.svg" width="800">
 
                 <h2>2.3 תיאור מחלקות הפרויקט</h2>
 
-                <div class="image-placeholder">
-                    [מקום לתרשים UML של המחלקות]
-                </div>
+                <img src="Classes-chart.svg" width="700" class="uml">
 
                 <h3>חלוקה לקטגוריות</h3>
 
@@ -1436,9 +1418,7 @@ interface EventDao {
 
                 <h2>3.3 תרשימי זרימה</h2>
 
-                <div class="image-placeholder">
-                    [מקום לתרשים זרימה של עיבוד התראה]
-                </div>
+                <img src="Notification-process-flow-chart.svg" width="500" class="uml">
 
                 <h3>תהליך עיבוד התראה</h3>
                 <div class="info-box">
@@ -3278,14 +3258,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 </div>
 
                 <h2>נספח ב' - תמונות מסכים</h2>
-                <div class="image-placeholder">
-                    [מקום לתמונות מסכים של האפליקציה - מסך ראשי, הגדרות, אודות ועריכת הודעת מערכת]
-                </div>
+                <img src="main_activity_explained.svg" width="750">
+                <img src="settings_activity_explained.svg" width="750">
+                <img src="about_activity_explained.svg" width="750">
+                <img src="edit_sys_prompt_activity_explained.svg" width="750">
 
                 <h2>נספח ג' - תרשימים טכניים</h2>
-                <div class="image-placeholder">
-                    [מקום לתרשימי UML של המחלקות ותרשימי זרימה של תהליכי המערכת]
-                </div>
+                <img src="Classes-chart.svg" width="700" class="uml">
+                <img src="Notification-process-flow-chart.svg" width="500" class="uml">
 
                 <h2>נספח ד' - קבצי תצורה</h2>
                 <div class="code-block">

@@ -1,0 +1,53 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36" version="27.0.9">
+  <diagram name="Page-1" id="PIDc5xQBQ2qk-h52vvgz">
+    <mxGraphModel dx="2066" dy="1079" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="QMjJ2E7ZA8C0QVmtVVMt-1" target="QMjJ2E7ZA8C0QVmtVVMt-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-1" value="Notification received" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="365" y="30" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="QMjJ2E7ZA8C0QVmtVVMt-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="425" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-2" value="gpt data processor" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="365" y="420" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-10" value="&amp;nbsp;Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" target="QMjJ2E7ZA8C0QVmtVVMt-14">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="640" as="sourcePoint" />
+            <mxPoint x="555" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-13" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="QMjJ2E7ZA8C0QVmtVVMt-12" target="QMjJ2E7ZA8C0QVmtVVMt-16">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="270" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-12" value="Has event?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="385" y="600" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-14" value="Add to DB" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="730" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-16" value="Do nothing" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="730" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-25" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="QMjJ2E7ZA8C0QVmtVVMt-19" target="QMjJ2E7ZA8C0QVmtVVMt-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-19" value="Notiication sender package name in allowed apps list" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="248" y="110" width="355" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="QMjJ2E7ZA8C0QVmtVVMt-26" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.008;entryY=0.617;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="QMjJ2E7ZA8C0QVmtVVMt-19" target="QMjJ2E7ZA8C0QVmtVVMt-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
