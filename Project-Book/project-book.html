@@ -9,6 +9,16 @@
         /* CSS Styles */
         @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
 
+        @media print {
+        .page, .page-break { break-after: page;}
+        }
+
+        @page {
+            margin-top: 50mm;
+            margin-bottom: 25mm;
+        }
+
+
         * {
             margin: 0;
             padding: 0;
@@ -16,15 +26,16 @@
         }
 
         body {
-            font-family: 'Heebo', Arial, sans-serif;
-            line-height: 1.8;
-            color: #333;
-            background-color: #fafafa;
+            font-family: 'David', 'Arial', sans-serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            margin: 1cm;
             direction: rtl;
+            color: #333;
         }
 
         .container {
-            max-width: 210mm;
+            max-width: 250mm;
             margin: 0 auto;
             background: white;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -161,6 +172,7 @@
         p {
             margin-bottom: 1rem;
             text-align: justify;
+            break-inside: avoid;
         }
 
         /* Lists */
@@ -197,6 +209,7 @@
             line-height: 1.4;
             direction: ltr;
             text-align: left;
+            break-inside: avoid;
         }
 
         .code-block pre {
@@ -282,6 +295,7 @@
 
         /* Section dividers */
         .section-divider {
+            break-after: page;
             height: 3px;
             background: linear-gradient(90deg, #667eea, #764ba2);
             margin: 3rem 0;
@@ -310,7 +324,7 @@
         }
 
         /* Responsive design */
-        @media (max-width: 768px) {
+        @media (max-width: 2000px) {
             .container {
                 margin: 0;
             }
@@ -353,6 +367,8 @@
                 <p><strong>תאריך ההגשה:</strong> 12.6.2025 </p>
             </div>
         </div>
+
+        <div class="page-break"></div>
 
         <div class="content">
             <!-- Table of Contents -->
@@ -543,8 +559,10 @@
                         <li>TextView להצגת הוראות כאשר אין אירועים</li>
                     </ul>
                 </div>
-
+                
                 <img src="main_activity_explained.svg" width="750">
+
+                <div class="page-break"></div>
 
                 <h3>מסך הגדרות - SettingsActivity</h3>
                 <div class="info-box">
@@ -561,6 +579,8 @@
 
                 <img src="settings_activity_explained.svg" width="800">
 
+                <div class="page-break"></div>
+
                 <h3>מסך אודות - AboutActivity</h3>
                 <div class="info-box">
                     <p><strong>תפקיד המסך:</strong> הצגת מידע על האפליקציה ומפתח</p>
@@ -568,6 +588,8 @@
                 </div>
 
                 <img src="about_activity_explained.svg" width="800">
+
+                <div class="page-break"></div>
 
                 <h3>מסך עריכת הודעת מערכת - EditSystemPromptActivity</h3>
                 <div class="info-box">
@@ -583,9 +605,13 @@
 
                 <img src="edit_sys_prompt_activity_explained.svg" width="800">
 
+                <div class="page-break"></div>
+
                 <h2>2.3 תיאור מחלקות הפרויקט</h2>
 
-                <img src="Classes-chart.svg" width="700" class="uml">
+                <img src="Classes-chart.svg" width="500" class="uml">
+
+                <div class="page-break"></div>
 
                 <h3>חלוקה לקטגוריות</h3>
 
@@ -653,6 +679,8 @@ protected int getSelectedNavItemId() {
                     </pre>
                 </div>
 
+                <div class="page-break"></div>
+
                 <h3>מחלקת AppDatabase</h3>
                 <div class="info-box">
                     <p><strong>תפקיד המחלקה:</strong> מסד נתונים ראשי של האפליקציה באמצעות Room</p>
@@ -672,6 +700,8 @@ public abstract class AppDatabase extends RoomDatabase {
 }
                     </pre>
                 </div>
+
+                <div class="page-break"></div>
 
                 <h3>מחלקת BaseActivity</h3>
                 <div class="info-box">
@@ -731,6 +761,8 @@ private void setupBottomNavigation() {
                     </pre>
                 </div>
 
+                <div class="page-break"></div>
+
                 <h3>מחלקת CalenderManager</h3>
                 <div class="info-box">
                     <p><strong>תפקיד המחלקה:</strong> ניהול אינטגרציה עם לוחות השנה</p>
@@ -778,6 +810,8 @@ public void addToSpecificCalendar(Event event, long calendarId) {
                     </pre>
                 </div>
 
+                <div class="page-break"></div>
+
                 <h3>מחלקת ChatGptApi</h3>
                 <div class="info-box">
                     <p><strong>תפקיד המחלקה:</strong> ניהול תקשורת עם OpenAI API</p>
@@ -818,6 +852,8 @@ public void sendQuery(Object[] messages, Callback callback) {
 }
                     </pre>
                 </div>
+
+                <div class="page-break"></div>
 
                 <h3>מחלקת ChatGptDataProcessor</h3>
                 <div class="info-box">
@@ -916,6 +952,8 @@ public void processNotification(StatusBarNotification sbn) {
                     </pre>
                 </div>
 
+                <div class="page-break"></div>
+
                 <h3>מחלקת Constants</h3>
                 <div class="info-box">
                     <p><strong>תפקיד המחלקה:</strong> ממשק המכיל קבועים גלובליים לאפליקציה</p>
@@ -928,6 +966,8 @@ public void processNotification(StatusBarNotification sbn) {
                         <li><code>SELECTED_CALENDERS_PREFERENCE</code> - מפתח העדפות לוחות שנה</li>
                     </ul>
                 </div>
+
+                <div class="page-break"></div>
 
                 <h3>מחלקת Converters</h3>
                 <div class="info-box">
@@ -958,6 +998,8 @@ public static ZonedDateTime toZoneDateTime(String dateTimeString) {
                     </pre>
                 </div>
 
+                <div class="page-break"></div>
+
                 <h3>מחלקת DataBaseSingletone</h3>
                 <div class="info-box">
                     <p><strong>תפקיד המחלקה:</strong> יישום דפוס Singleton למסד הנתונים</p>
@@ -982,6 +1024,8 @@ public static AppDatabase get_db(Context context){
                     </pre>
                 </div>
 
+                <div class="page-break"></div>
+
                 <h3>מחלקת DataProcessor (מופשטת)</h3>
                 <div class="info-box">
                     <p><strong>תפקיד המחלקה:</strong> מחלקת בסיס מופשטת לעיבוד נתונים מהתראות</p>
@@ -996,6 +1040,8 @@ public static AppDatabase get_db(Context context){
                         <li><code>processNotification(StatusBarNotification sbn)</code> - פונקציה מופשטת לעיבוד</li>
                     </ul>
                 </div>
+
+                <div class="page-break"></div>
 
                 <h3>מחלקת EditSystemPromptActivity</h3>
                 <div class="info-box">
@@ -1044,6 +1090,8 @@ protected void onCreate(Bundle savedInstanceState) {
                     </pre>
                 </div>
 
+                <div class="page-break"></div>
+
                 <h3>ממשק EventDao + מחלקת Event</h3>
                 <div class="info-box">
                     <p><strong>תפקיד הממשק:</strong> ממשק גישה לנתונים (DAO) לאירועים במסד הנתונים</p>
@@ -1066,6 +1114,8 @@ protected void onCreate(Bundle savedInstanceState) {
                         <li><code>getAllLive()</code> - קבלת אירועים כ-LiveData</li>
                     </ul>
                 </div>
+
+                <div class="page-break"></div>
 
                 <h3>מחלקת LLMUtils</h3>
                 <div class="info-box">
@@ -1100,6 +1150,8 @@ static private String get_curr_time_zone() {
 }
                     </pre>
                 </div>
+
+                <div class="page-break"></div>
 
                 <h3>מחלקת MainActivity</h3>
                 <div class="info-box">
@@ -1151,6 +1203,8 @@ private void toggleBulkOp() {
                     </pre>
                 </div>
 
+                <div class="page-break"></div>
+
                 <h3>מחלקת NotificationService</h3>
                 <div class="info-box">
                     <p><strong>תפקיד המחלקה:</strong> שירות האזנה להתראות מערכת ועיבודן</p>
@@ -1182,6 +1236,8 @@ public void onNotificationPosted(StatusBarNotification sbn) {
 }
                     </pre>
                 </div>
+
+                <div class="page-break"></div>
 
                 <h3>מחלקת RecyclerViewEventsAdapter</h3>
                 <div class="info-box">
@@ -1245,6 +1301,8 @@ public void bind(Event event) {
                     </pre>
                 </div>
 
+                <div class="page-break"></div>
+
                 <h3>מחלקת SettingsActivity</h3>
                 <div class="info-box">
                     <p><strong>תפקיד המחלקה:</strong> מסך הגדרות שמארח את ה-SettingsFragment</p>
@@ -1268,6 +1326,8 @@ protected void onCreate(Bundle savedInstanceState) {
 }
                     </pre>
                 </div>
+
+                <div class="page-break"></div>
 
                 <h3>מחלקת SettingsFragment</h3>
                 <div class="info-box">
@@ -3113,6 +3173,8 @@ public class SettingsActivity extends BaseActivity {
 }
                     </pre>
                 </div>
+
+                <div class="page-break"></div>
 
                 <h3>מחלקת SettingsFragment</h3>
                 <div class="code-block">
